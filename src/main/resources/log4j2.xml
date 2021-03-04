@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="sm.ciscoop.plotge.log">
+	<Appenders>
+		<File name="plotge" fileName="plotge.log" append="true">
+			<PatternLayout pattern="%d %-5p %c{2}:%L - %m%n" />
+		</File>
+		<RollingFile name="RollingFile">
+			<FileName>log/plotge.log</FileName>
+			<FilePattern>log/plotge-logs/%d{yyyy-MM-dd}.zip</FilePattern>
+			<PatternLayout>
+				<!--  Pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} -	%msg%n</Pattern -->
+				<Pattern>%d %-5p %c{2}:%L - %m%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+		<!-- vedi pattern https://logging.apache.org/log4j/2.x/manual/layouts.html -->
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %-5p %c{2}:%L - %m%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="STDOUT" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+		<logger name="org.apache.xml" level="info">
+			<AppenderRef ref="STDOUT" />
+		</logger>
+	</Loggers>
+</Configuration>

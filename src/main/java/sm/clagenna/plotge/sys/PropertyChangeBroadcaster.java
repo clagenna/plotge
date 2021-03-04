@@ -1,0 +1,92 @@
+package sm.clagenna.plotge.sys;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import sm.clagenna.plotge.enumerati.EPropChange;
+
+public class PropertyChangeBroadcaster {
+
+  private static final Logger              s_log = LogManager.getLogger(PropertyChangeBroadcaster.class);
+
+  private static PropertyChangeBroadcaster s_inst;
+
+  private List<PropertyChangeListener>     m_liBCstPropList;
+  private boolean                          m_bBroadcastPropEventChange;
+
+  public PropertyChangeBroadcaster() {
+    if (s_inst != null)
+      throw new UnsupportedOperationException("PropertyChangeBroadcaster gia istanziato");
+    s_inst = this;
+  }
+
+  public static PropertyChangeBroadcaster getInst() {
+    return s_inst;
+  }
+
+  public void addPropertyChangeListener(PropertyChangeListener p_listen) {
+    if (m_liBCstPropList == null)
+      m_liBCstPropList = new ArrayList<>();
+    @SuppressWarnings("unused")
+    String szName = p_listen.getClass().getSimpleName();
+
+    if ( !m_liBCstPropList.contains(p_listen))
+      m_liBCstPropList.add(p_listen);
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener p_listen) {
+    if (m_liBCstPropList == null)
+      return;
+    if (m_liBCstPropList.contains(p_listen))
+      m_liBCstPropList.remove(p_listen);
+    if (m_liBCstPropList.size() == 0)
+      m_liBCstPropList = null;
+  }
+
+  public void setBroadcastPropEventChange(boolean p_bv) {
+    m_bBroadcastPropEventChange = p_bv;
+  }
+
+  public boolean isBroadcastPropEventChange() {
+    return m_bBroadcastPropEventChange;
+  }
+
+  public void broadCast(Object p_cls, EPropChange p_prop) {
+    broadCast(p_cls, p_prop.name());
+  }
+
+  public void broadCast(Object p_cls, String p_prop) {
+    PropertyChangeEvent p_evt = new PropertyChangeEvent(p_cls, p_prop, null, null);
+    broadCast(p_evt);
+  }
+
+  public void broadCast(PropertyChangeEvent p_evt) {
+    if (p_evt == null)
+      return;
+    if (isBroadcastPropEventChange())
+      return;
+
+    if (m_liBCstPropList == null || m_liBCstPropList.size() == 0) {
+      s_log.debug("Nessun listener per property:" + p_evt.getPropertyName());
+      return;
+    }
+    setBroadcastPropEventChange(true);
+    try {
+      for (PropertyChangeListener p : m_liBCstPropList) {
+        try {
+          p.propertyChange(p_evt);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    } finally {
+      setBroadcastPropEventChange(false);
+    }
+  }
+
+}
