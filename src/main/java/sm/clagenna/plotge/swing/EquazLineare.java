@@ -16,6 +16,8 @@ public class EquazLineare {
   @SuppressWarnings("unused") private PlotBordo m_bo;
   private Punto                                 m_p1;
   private Punto                                 m_p2;
+  private boolean                               m_bVerticale;
+  private boolean                               m_bOrizontale;
   private static double                         sTolleranza = 1.;
 
   private double                                m_a;
@@ -48,11 +50,14 @@ public class EquazLineare {
   }
 
   private void calcolaEquazLineare() {
-    if (m_p2.getX() == m_p1.getX() || m_p2.getY() == m_p1.getY()) {
-      throw new IllegalArgumentException("funzione verticale od orizontale non ammessa");
-    }
-    m_a = (m_p2.getY() - m_p1.getY()) / (m_p2.getX() - m_p1.getX());
-    m_b = m_p1.getY() - m_p1.getX() * m_a;
+    m_a = 0;
+    m_b = 0;
+    m_bVerticale = m_p2.getPx() == m_p1.getPx();
+    m_bOrizontale = m_p2.getPy() == m_p1.getPy();
+    if (m_bVerticale || m_bOrizontale)
+      return;
+    m_a = (m_p2.getPy() - m_p1.getPy()) / (m_p2.getPx() - m_p1.getPx());
+    m_b = m_p1.getPy() - m_p1.getPx() * m_a;
   }
 
   public void disegnaRetta(Graphics2D p_g) {
@@ -68,15 +73,17 @@ public class EquazLineare {
   }
 
   public double retta(double p_x) {
+    if (m_bOrizontale || m_bVerticale)
+      return m_p1.getPy();
     return p_x * m_a + m_b;
   }
 
-  public boolean inLine(Point p_pu) {
-    return inLine(p_pu.getX(), p_pu.getY(), false);
-  }
+//  public boolean inLine(Point p_pu) {
+//    return inLine(p_pu.getX(), p_pu.getY(), false);
+//  }
 
-  public boolean inLine(Point p_pu, boolean p_bound) {
-    return inLine(p_pu.getX(), p_pu.getY(), p_bound);
+  public boolean inLine(Punto p_pu, boolean p_bound) {
+    return inLine(p_pu.getPx(), p_pu.getPy(), p_bound);
   }
 
   public boolean inLine(double lx, double ly) {
@@ -98,22 +105,31 @@ public class EquazLineare {
    */
   public boolean inLine(double lx, double ly, boolean p_bound) {
     // se P1 P2 e' verticale
-    if (m_p1.getX() == lx)
-      return m_p2.getX() == lx;
+    if (m_p1.getWx() == lx)
+      return m_p2.getWx() == lx;
     // se P1 P2 e' orizontale
-    if (m_p1.getY() == ly)
-      return m_p2.getY() == ly;
+    if (m_p1.getWy() == ly)
+      return m_p2.getWy() == ly;
     if (p_bound) {
       // se PX e' fra P1 e P2
-      double lx1 = Math.min(m_p1.getX(), m_p2.getX());
-      double lx2 = Math.max(m_p1.getX(), m_p2.getX());
+      double lx1 = Math.min(m_p1.getWx(), m_p2.getWx()) - 0.1;
+      double lx2 = Math.max(m_p1.getWx(), m_p2.getWx()) + 0.1;
       if (lx < lx1 || lx > lx2)
         return false;
+      // se PY e' fra P1 e P2
+      double ly1 = Math.min(m_p1.getWy(), m_p2.getWy()) - 0.1;
+      double ly2 = Math.max(m_p1.getWy(), m_p2.getWy()) + 0.1;
+      if (ly < ly1 || ly > ly2)
+        return false;
     }
+    // se verticale, sono gia nel range col test sopra
+    if ( m_bVerticale) 
+      return true;
+    
 
     // test sul gradiente
-    double k1 = (ly - m_p1.getY()) * (m_p2.getX() - m_p1.getX());
-    double k2 = (m_p2.getY() - m_p1.getY()) * (lx - m_p1.getX());
+    double k1 = (ly - m_p1.getWy()) * (m_p2.getWx() - m_p1.getWx());
+    double k2 = (m_p2.getWy() - m_p1.getWy()) * (lx - m_p1.getWx());
     double diff = Math.abs(k1 - k2);
     // System.out.printf("EquazLineare.inLine(%.3f)\n", diff);
     return diff < sTolleranza;

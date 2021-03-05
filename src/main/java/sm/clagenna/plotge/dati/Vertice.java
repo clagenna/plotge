@@ -74,4 +74,14 @@ public class Vertice implements Comparable<Vertice> {
 
   }
 
+  @Override
+  public String toString() {
+    String sz = "Ver: " + id;
+    if (bordi != null) {
+      for (Bordo bo : bordi.values())
+        sz += "\n\t" + bo.toString();
+    }
+    return sz;
+  }
+
 }

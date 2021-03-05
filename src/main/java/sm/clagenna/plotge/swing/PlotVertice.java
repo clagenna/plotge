@@ -3,11 +3,11 @@ package sm.clagenna.plotge.swing;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +44,7 @@ public class PlotVertice {
   }
 
   public PlotVertice(Vertice p_v) {
+    m_colore = s_Vert;
     m_vert = p_v;
     setRaggio(s_raggioDefault);
   }
@@ -52,11 +53,13 @@ public class PlotVertice {
     double zoo = p_trasp.getZoom();
     int ragW = (int) (raggio * zoo);
     Graphics2D g2 = (Graphics2D) p_g2.create();
-    Point pu = p_trasp.convertiW(m_vert.getPunto());
+    Punto pVert = p_trasp.convertiW(m_vert.getPunto());
+    int px = pVert.getWx();
+    int py = pVert.getWy();
     Color bkg = g2.getBackground();
     if (m_vert.isStart() || m_vert.isEnd()) {
       int ragWSE = ragW + 5;
-      Shape lcerchio = new Ellipse2D.Double(pu.x - ragWSE, pu.y - ragWSE, ragWSE * 2.0, ragWSE * 2.0);
+      Shape lcerchio = new Ellipse2D.Double(px - ragWSE, py - ragWSE, ragWSE * 2.0, ragWSE * 2.0);
       g2.setColor(bkg);
       g2.fill(lcerchio);
       if (m_vert.isStart())
@@ -67,7 +70,7 @@ public class PlotVertice {
     }
     // il piu stretto
     var l_rag = (int) (getRaggio() * zoo);
-    m_cerchio = new Ellipse2D.Double(pu.x - l_rag, pu.y - l_rag, l_rag * 2.0, l_rag * 2.0);
+    m_cerchio = new Ellipse2D.Double(px - l_rag, py - l_rag, l_rag * 2.0, l_rag * 2.0);
     if (m_vert.isCieco())
       bkg = Color.gray;
     g2.setColor(bkg);
@@ -84,17 +87,28 @@ public class PlotVertice {
   private void stampaNome(Graphics2D g2, TrasponiFinestra p_trasp) {
     double nFsize = p_trasp.getZoom();
     String sz = m_vert.getId();
-    Font font = new Font("SanSerif", Font.PLAIN, (int) (nFsize ));
+    Font font = new Font("SanSerif", Font.PLAIN, (int) (nFsize));
     FontRenderContext frc = g2.getFontRenderContext();
     GlyphVector gv = font.createGlyphVector(frc, sz);
-    // Rectangle2D rec = gv.getVisualBounds();
-    Punto pu = p_trasp.convertiW(m_vert.getPunto());
+    Rectangle2D rec = gv.getVisualBounds();
+    Punto pVert = p_trasp.convertiW(m_vert.getPunto());
+    int px = pVert.getWx();
+    int py = pVert.getWy();
     g2.setColor(s_Vert_End);
     // float px = (pu.x - (nFsize / +5F) * (sz.length() - 1));
-    float px = (float) (pu.x - (nFsize * 1F) /* * (sz.length() - 1) */);
-    float py = (float) (pu.y + nFsize / 1F);
+    // float pfx = (float) (px - (nFsize * 0.6F));
+    float pfx = (float) (px - (rec.getWidth() / 2));
+    // float pfy = (float) (py + nFsize / 2.5F);
+    float pfy = (float) (py + (rec.getHeight() / 2));
     // System.out.printf("PlotVertice.stampaNome(\"%s\", %.2f, %.2f) zo=%.2f\n", sz, px, py, nFsize);
-    g2.drawGlyphVector(gv, px, py);
+    g2.drawGlyphVector(gv, pfx, pfy);
+  }
+
+  public String getId() {
+    String ret = "?";
+    if (m_vert != null)
+      ret = m_vert.getId();
+    return ret;
   }
 
   public Punto getPunto() {
@@ -113,6 +127,25 @@ public class PlotVertice {
     if (m_vert == null)
       return false;
     return m_vert.isEnd();
+  }
+
+  public boolean checkBersaglio(Punto p_pu) {
+    Punto lPu = m_vert.getPunto();
+    double dx = Math.abs(p_pu.getPx() - lPu.getPx());
+    if (dx > raggio)
+      return false;
+    double dy = Math.abs(p_pu.getPy() - lPu.getPy());
+    return dy <= raggio;
+  }
+
+  @Override
+  public String toString() {
+    Punto pu = m_vert.getPunto();
+    String sz = String.format("Vert.%s,Pu={%s}", //
+        m_vert.getId(), //
+        pu.toString());
+    sz += "\n\t" + m_vert.toString();
+    return sz;
   }
 
 }

@@ -76,4 +76,12 @@ public class Bordo implements Comparable<Bordo> {
     return bRet;
   }
 
+  @Override
+  public String toString() {
+    String sz = verticeDa == null ? "*novert*" : verticeDa.getId();
+    sz += "->" + (verticeA == null ? "*novert*" : verticeA.getId());
+    sz += "(" + peso + ")";
+    return sz;
+  }
+
 }

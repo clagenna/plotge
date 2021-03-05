@@ -15,8 +15,8 @@ import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 public class PanelBase extends JPanel {
 
   /** serialVersionUID long */
-  private static final long serialVersionUID = 5653594504599665379L;
-  private TrasponiFinestra  m_trasp;
+  private static final long                            serialVersionUID = 5653594504599665379L;
+  @SuppressWarnings("unused") private TrasponiFinestra m_trasp;
 
   public PanelBase() {
     initialize();
@@ -24,7 +24,6 @@ public class PanelBase extends JPanel {
 
   public PanelBase(LayoutManager p_layout) {
     super(p_layout);
-    // TODO Auto-generated constructor stub
   }
 
   private void initialize() {
