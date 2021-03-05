@@ -1,5 +1,6 @@
 package sm.clagenna.plotge.swing;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -24,19 +25,21 @@ import sm.clagenna.plotge.dati.Vertice;
  */
 public class PlotVertice {
 
-  private static Color        s_Vert          = new Color(0, 0, 0);
-  private static Color        s_Vert_Selected = new Color(32, 128, 32);
-  private static Color        s_Vert_Start    = new Color(0, 128, 0);
-  private static Color        s_Vert_End      = Color.magenta;
+  private static Color                      s_Vert          = new Color(0, 0, 0);
+  private static Color                      s_Vert_Selected = new Color(92, 128, 92);
+  private static Color                      s_Vert_Start    = new Color(0, 128, 0);
+  private static Color                      s_Vert_End      = Color.magenta;
 
-  private static int          s_raggioDefault = 1;
+  private static int                        s_raggioDefault = 1;
 
   @Getter
-  @Setter private int         raggio;
+  @Setter private int                       raggio;
 
-  private Vertice             m_vert;
-  private Shape               m_cerchio;
-  private transient Color     m_colore;
+  private Vertice                           m_vert;
+  private Shape                             m_cerchio;
+  private transient Color                   m_colore;
+  @Getter
+  @Setter private transient boolean         selected;
 
   public PlotVertice() {
     m_colore = s_Vert;
@@ -49,7 +52,7 @@ public class PlotVertice {
     setRaggio(s_raggioDefault);
   }
 
-  public void paintComponent(Graphics2D p_g2, TrasponiFinestra p_trasp, boolean bSel) {
+  public void paintComponent(Graphics2D p_g2, TrasponiFinestra p_trasp) {
     double zoo = p_trasp.getZoom();
     int ragW = (int) (raggio * zoo);
     Graphics2D g2 = (Graphics2D) p_g2.create();
@@ -75,9 +78,10 @@ public class PlotVertice {
       bkg = Color.gray;
     g2.setColor(bkg);
     g2.fill(m_cerchio);
-    if (bSel)
+    if (isSelected()) {
       g2.setColor(s_Vert_Selected);
-    else
+      g2.setStroke(new BasicStroke(3));
+    } else
       g2.setColor(m_colore);
     g2.draw(m_cerchio);
     stampaNome(g2, p_trasp);

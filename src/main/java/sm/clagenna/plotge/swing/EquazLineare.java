@@ -78,17 +78,20 @@ public class EquazLineare {
     return p_x * m_a + m_b;
   }
 
-//  public boolean inLine(Point p_pu) {
-//    return inLine(p_pu.getX(), p_pu.getY(), false);
-//  }
+  //  public boolean inLine(Point p_pu) {
+  //    return inLine(p_pu.getX(), p_pu.getY(), false);
+  //  }
 
-  public boolean inLine(Punto p_pu, boolean p_bound) {
-    return inLine(p_pu.getPx(), p_pu.getPy(), p_bound);
+  //  public boolean inLine(Punto p_pu ) {
+  //    return inLine(p_pu.getPx(), p_pu.getPy() );
+  //  }
+  public boolean inLine(Punto p_pu) {
+    return inLine(p_pu.getPx(), p_pu.getPy());
   }
 
-  public boolean inLine(double lx, double ly) {
-    return inLine(lx, ly, false);
-  }
+  //  public boolean inLine(double lx, double ly) {
+  //    return inLine(lx, ly, false);
+  //  }
 
   /**
    * Prova se giace sulla riga p1 - p2
@@ -103,35 +106,34 @@ public class EquazLineare {
    *          se devo verificare che X sia interno ai punti
    * @return
    */
-  public boolean inLine(double lx, double ly, boolean p_bound) {
+  public boolean inLine(double lx, double ly) {
     // se P1 P2 e' verticale
     if (m_p1.getWx() == lx)
       return m_p2.getWx() == lx;
     // se P1 P2 e' orizontale
     if (m_p1.getWy() == ly)
       return m_p2.getWy() == ly;
-    if (p_bound) {
-      // se PX e' fra P1 e P2
-      double lx1 = Math.min(m_p1.getWx(), m_p2.getWx()) - 0.1;
-      double lx2 = Math.max(m_p1.getWx(), m_p2.getWx()) + 0.1;
-      if (lx < lx1 || lx > lx2)
-        return false;
-      // se PY e' fra P1 e P2
-      double ly1 = Math.min(m_p1.getWy(), m_p2.getWy()) - 0.1;
-      double ly2 = Math.max(m_p1.getWy(), m_p2.getWy()) + 0.1;
-      if (ly < ly1 || ly > ly2)
-        return false;
-    }
+
+    // se PX e' fra P1 e P2
+    double lx1 = Math.min(m_p1.getWx(), m_p2.getWx()) - 0.1;
+    double lx2 = Math.max(m_p1.getWx(), m_p2.getWx()) + 0.1;
+    if (lx < lx1 || lx > lx2)
+      return false;
+    // se PY e' fra P1 e P2
+    double ly1 = Math.min(m_p1.getWy(), m_p2.getWy()) - 0.1;
+    double ly2 = Math.max(m_p1.getWy(), m_p2.getWy()) + 0.1;
+    if (ly < ly1 || ly > ly2)
+      return false;
+
     // se verticale, sono gia nel range col test sopra
-    if ( m_bVerticale) 
+    if (m_bVerticale)
       return true;
-    
 
     // test sul gradiente
     double k1 = (ly - m_p1.getWy()) * (m_p2.getWx() - m_p1.getWx());
     double k2 = (m_p2.getWy() - m_p1.getWy()) * (lx - m_p1.getWx());
     double diff = Math.abs(k1 - k2);
-    // System.out.printf("EquazLineare.inLine(%.3f)\n", diff);
+
     return diff < sTolleranza;
   }
 

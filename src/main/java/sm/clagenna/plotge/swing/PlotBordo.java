@@ -19,22 +19,25 @@ import sm.clagenna.plotge.dati.TrasponiFinestra;
 
 public class PlotBordo {
 
-  private static Color                    s_defaulColor     = Color.pink;
-  private static Color                    s_shortestColor   = Color.red;
-  private static Color                    s_labelColor      = new Color(32, 128, 32);
+  private static Color                      s_defaulColor     = Color.pink;
+  private static Color                      s_shortestColor   = Color.red;
+  private static Color                      s_labelColor      = new Color(32, 128, 32);
 
-  private static int                      s_defaultSpessore = 3;
-  private Bordo                           m_bordo;
+  private static int                        s_defaultSpessore = 3;
+  private Bordo                             m_bordo;
 
-  private PlotVertice                     m_vDa;
-  private PlotVertice                     m_vA;
+  private PlotVertice                       m_vDa;
+  private PlotVertice                       m_vA;
 
   @Getter
-  @Setter private transient Color         color;
+  @Setter private transient Color           color;
   @Getter
-  @Setter private int                     spessore;
-  private Polygon                         m_freccia;
-  private EquazLineare                    m_eq;
+  @Setter private int                       spessore;
+  @Getter
+  @Setter private transient boolean         selected;
+
+  private Polygon                           m_freccia;
+  private EquazLineare                      m_eq;
 
   public PlotBordo(Bordo p_bo) {
     m_bordo = p_bo;
@@ -54,22 +57,18 @@ public class PlotBordo {
     m_vA = new PlotVertice(m_bordo.getVerticeA());
   }
 
-  public void paintComponent(Graphics2D g2, TrasponiFinestra p_trasp) {
-    paintComponent(g2, p_trasp, false);
-  }
-
-  private void paintComponent(Graphics2D p_g2, TrasponiFinestra p_trasp, boolean p_sel) {
+  public void paintComponent(Graphics2D p_g2, TrasponiFinestra p_trasp) {
     Graphics2D g2 = (Graphics2D) p_g2.create();
-    stampaBordo(g2, p_trasp, p_sel);
+    stampaBordo(g2, p_trasp);
     stampaPeso(g2, p_trasp);
     stampaFreccia(g2, p_trasp);
     g2.dispose();
   }
 
-  private void stampaBordo(Graphics2D p_g2, TrasponiFinestra p_trasp, boolean p_sel) {
+  private void stampaBordo(Graphics2D p_g2, TrasponiFinestra p_trasp) {
     Graphics2D g2 = p_g2;
     Stroke stk = new BasicStroke(getSpessore());
-    if (p_sel)
+    if (isSelected())
       g2.setColor(Color.red);
     else if (m_bordo.getShortNo() > 0) {
       g2.setColor(PlotBordo.s_shortestColor);
@@ -144,7 +143,7 @@ public class PlotBordo {
     if (m_eq == null)
       return bRet;
 
-    bRet = m_eq.inLine(p_pu, true);
+    bRet = m_eq.inLine(p_pu);
     return bRet;
   }
 

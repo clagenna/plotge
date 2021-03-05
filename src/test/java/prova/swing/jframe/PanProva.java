@@ -26,10 +26,11 @@ public class PanProva extends JPanel {
   private static final long serialVersionUID = -8278183255370594859L;
   // private int               zoom;
   private TrasponiFinestra  m_trasp;
-
   private List<PlotVertice> m_liPVert;
   private List<PlotBordo>   m_liPBord;
-  private PlotBordo         m_plBo;
+
+  private PlotBordo         m_bordoSel;
+  private PlotVertice       m_vertSel;
 
   public PanProva() {
     inizializza();
@@ -70,33 +71,36 @@ public class PanProva extends JPanel {
     Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
     double lx1 = pu.getX();
     double ly1 = pu.getY();
-    // boolean bSel = false;
-    PlotBordo pBo = null;
-    PlotVertice pVe = null;
+    if (m_bordoSel != null)
+      m_bordoSel.setSelected(false);
+    if (m_vertSel != null)
+      m_vertSel.setSelected(false);
+    m_bordoSel = null;
+    m_vertSel = null;
     for (PlotVertice ve : m_liPVert)
       if (ve.checkBersaglio(pu)) {
-        pVe = ve;
+        m_vertSel = ve;
         break;
       }
-    for (PlotBordo bo : m_liPBord)
-      if (bo.checkBersaglio(pu)) {
-        pBo = bo;
-        break;
-      }
+    if (m_vertSel == null) {
+      for (PlotBordo bo : m_liPBord)
+        if (bo.checkBersaglio(pu)) {
+          m_bordoSel = bo;
+          break;
+        }
+    }
     System.out.printf("MousePress (%s)  (%.2f, %.2f) V=%s , B=%s\n", //
         pu.toString(), //
         lx1, ly1, //
-        (pVe != null ? pVe.getId() : "-" ), //
-        (pBo != null ? pBo.toString() : "-"));
+        (m_vertSel != null ? m_vertSel.getId() : "-"), //
+        (m_bordoSel != null ? m_bordoSel.toString() : "-"));
     boolean bRepaint = false;
-    if (m_plBo != null) {
-      m_plBo.getBordo().setShortNo(0);
-      m_plBo = null;
+    if (m_bordoSel != null) {
+      m_bordoSel.setSelected(true);
       bRepaint = true;
     }
-    if (pBo != null) {
-      m_plBo = pBo;
-      m_plBo.getBordo().setShortNo(1);
+    if (m_vertSel != null) {
+      m_vertSel.setSelected(true);
       bRepaint = true;
     }
     if (bRepaint)
@@ -124,7 +128,7 @@ public class PanProva extends JPanel {
   @Override
   public void paint(Graphics p_g) {
     //    TimeThis tt = new TimeThis("paint");
-    
+
     Graphics2D g2 = (Graphics2D) p_g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     if (m_trasp.isGeometryChanged(this))
@@ -146,7 +150,7 @@ public class PanProva extends JPanel {
 
   private void disegnaVertici(Graphics2D p_g2) {
     for (PlotVertice pve : m_liPVert)
-      pve.paintComponent(p_g2, m_trasp, false);
+      pve.paintComponent(p_g2, m_trasp);
   }
 
   private void caricaDati() {
@@ -170,15 +174,15 @@ public class PanProva extends JPanel {
     m_liPVert.add(new PlotVertice(ve4));
 
     m_liPBord = new ArrayList<>();
-    
+
     Bordo bo = new Bordo(ve1, ve2, 23);
     ve1.addBordo(bo);
     m_liPBord.add(new PlotBordo(bo));
-    
+
     bo = new Bordo(ve2, ve3, 13);
     ve2.addBordo(bo);
     m_liPBord.add(new PlotBordo(bo));
-    
+
     bo = new Bordo(ve2, ve4, 17);
     ve2.addBordo(bo);
     m_liPBord.add(new PlotBordo(bo));
