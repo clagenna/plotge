@@ -41,7 +41,7 @@ public class PlotBordo {
 
   public PlotBordo(Bordo p_bo) {
     m_bordo = p_bo;
-    m_eq = new EquazLineare(this);
+    recalculate();
     setColor(PlotBordo.s_defaulColor);
     setSpessore(s_defaultSpessore);
     initialize();
@@ -158,5 +158,9 @@ public class PlotBordo {
       return sz;
     sz = m_bordo.toString();
     return sz;
+  }
+
+  public void recalculate() {
+    m_eq = new EquazLineare(this);
   }
 }

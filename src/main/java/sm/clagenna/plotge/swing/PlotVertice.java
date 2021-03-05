@@ -115,6 +115,12 @@ public class PlotVertice {
     return ret;
   }
 
+  public void setPunto(Punto p_pu) {
+    if (m_vert == null)
+      return;
+    m_vert.setPunto(p_pu);
+  }
+
   public Punto getPunto() {
     if (m_vert == null)
       return null;

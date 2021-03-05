@@ -108,20 +108,20 @@ public class EquazLineare {
    */
   public boolean inLine(double lx, double ly) {
     // se P1 P2 e' verticale
-    if (m_p1.getWx() == lx)
-      return m_p2.getWx() == lx;
+    if (m_p1.getPx() == lx)
+      return m_p2.getPx() == lx;
     // se P1 P2 e' orizontale
-    if (m_p1.getWy() == ly)
-      return m_p2.getWy() == ly;
+    if (m_p1.getPy() == ly)
+      return m_p2.getPy() == ly;
 
     // se PX e' fra P1 e P2
-    double lx1 = Math.min(m_p1.getWx(), m_p2.getWx()) - 0.1;
-    double lx2 = Math.max(m_p1.getWx(), m_p2.getWx()) + 0.1;
+    double lx1 = Math.min(m_p1.getPx(), m_p2.getPx()) - 0.1;
+    double lx2 = Math.max(m_p1.getPx(), m_p2.getPx()) + 0.1;
     if (lx < lx1 || lx > lx2)
       return false;
     // se PY e' fra P1 e P2
-    double ly1 = Math.min(m_p1.getWy(), m_p2.getWy()) - 0.1;
-    double ly2 = Math.max(m_p1.getWy(), m_p2.getWy()) + 0.1;
+    double ly1 = Math.min(m_p1.getPy(), m_p2.getPy()) - 0.1;
+    double ly2 = Math.max(m_p1.getPy(), m_p2.getPy()) + 0.1;
     if (ly < ly1 || ly > ly2)
       return false;
 
@@ -130,8 +130,8 @@ public class EquazLineare {
       return true;
 
     // test sul gradiente
-    double k1 = (ly - m_p1.getWy()) * (m_p2.getWx() - m_p1.getWx());
-    double k2 = (m_p2.getWy() - m_p1.getWy()) * (lx - m_p1.getWx());
+    double k1 = (ly - m_p1.getPy()) * (m_p2.getPx() - m_p1.getPx());
+    double k2 = (m_p2.getPy() - m_p1.getPy()) * (lx - m_p1.getPx());
     double diff = Math.abs(k1 - k2);
 
     return diff < sTolleranza;

@@ -78,7 +78,7 @@ public class Punto extends Point implements Cloneable {
 
   @Override
   public String toString() {
-    String sz = String.format("W(%d,%d)-C(%.2f,%.2f)", x, y, px, py);
+    String sz = String.format("W(%d,%d)-C(%.2f:%.2f)", x, y, px, py);
     return sz;
   }
 

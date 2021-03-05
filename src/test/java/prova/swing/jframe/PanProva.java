@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +56,14 @@ public class PanProva extends JPanel {
         locMouseRelease(p_e);
       }
 
+    });
+
+    addMouseMotionListener(new MouseMotionAdapter() {
+
+      @Override
+      public void mouseDragged(MouseEvent p_e) {
+        locMouseDragged(p_e);
+      }
     });
 
     addMouseWheelListener(new MouseAdapter() {
@@ -108,14 +117,31 @@ public class PanProva extends JPanel {
 
   }
 
+  protected void locMouseDragged(MouseEvent p_e) {
+    boolean bRepaint = false;
+    Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
+    //    String sz = String.format("drag %s", pu.toString());
+    //    System.out.println("PanProva.locMouseDragged():" + sz);
+    if (m_vertSel != null) {
+      m_vertSel.setPunto(pu);
+      if (m_liPBord != null) {
+        for (PlotBordo bo : m_liPBord)
+          bo.recalculate();
+      }
+      bRepaint = true;
+    }
+    if (bRepaint)
+      repaint();
+  }
+
   protected void locMouseRelease(MouseEvent p_e) {
-    // TODO Auto-generated method stub
+    System.out.println("PanProva.locMouseRelease()");
 
   }
 
   protected void locMouseWheelMoved(MouseWheelEvent p_e) {
-    String szWhe = p_e.isControlDown() ? "Ctrl-Down" : "";
-    System.out.printf("ProvaSwingBase.locMouseWheelMoved(%d, %s)\n", p_e.getWheelRotation(), szWhe);
+    //    String szWhe = p_e.isControlDown() ? "Ctrl-Down" : "";
+    // System.out.printf("ProvaSwingBase.locMouseWheelMoved(%d, %s)\n", p_e.getWheelRotation(), szWhe);
     if (p_e.isControlDown()) {
       int inc = p_e.getWheelRotation() * 30;
       if (p_e.isShiftDown())
