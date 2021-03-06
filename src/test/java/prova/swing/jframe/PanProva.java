@@ -9,12 +9,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
 import sm.clagenna.plotge.dati.Bordo;
+import sm.clagenna.plotge.dati.ModelloDati;
 import sm.clagenna.plotge.dati.Punto;
 import sm.clagenna.plotge.dati.TrasponiFinestra;
 import sm.clagenna.plotge.dati.Vertice;
@@ -27,11 +26,12 @@ public class PanProva extends JPanel {
   private static final long serialVersionUID = -8278183255370594859L;
   // private int               zoom;
   private TrasponiFinestra  m_trasp;
-  private List<PlotVertice> m_liPVert;
-  private List<PlotBordo>   m_liPBord;
+  //  private List<PlotVertice> m_liPVert;
+  //  private List<PlotBordo>   m_liPBord;
 
   private PlotBordo         m_bordoSel;
   private PlotVertice       m_vertSel;
+  private ModelloDati       m_dati;
 
   public PanProva() {
     inizializza();
@@ -44,6 +44,7 @@ public class PanProva extends JPanel {
 
   public void inizializza() {
     m_trasp = new TrasponiFinestra(this);
+    m_dati = new ModelloDati();
 
     addMouseListener(new MouseAdapter() {
       @Override
@@ -76,6 +77,10 @@ public class PanProva extends JPanel {
     caricaDati();
   }
 
+  public ModelloDati getDati() {
+    return m_dati;
+  }
+
   protected void locMousePress(MouseEvent p_e) {
     Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
     double lx1 = pu.getX();
@@ -86,13 +91,13 @@ public class PanProva extends JPanel {
       m_vertSel.setSelected(false);
     m_bordoSel = null;
     m_vertSel = null;
-    for (PlotVertice ve : m_liPVert)
+    for (PlotVertice ve : m_dati.getPlotVertici())
       if (ve.checkBersaglio(pu)) {
         m_vertSel = ve;
         break;
       }
     if (m_vertSel == null) {
-      for (PlotBordo bo : m_liPBord)
+      for (PlotBordo bo : m_dati.getPlotBordi())
         if (bo.checkBersaglio(pu)) {
           m_bordoSel = bo;
           break;
@@ -124,10 +129,8 @@ public class PanProva extends JPanel {
     //    System.out.println("PanProva.locMouseDragged():" + sz);
     if (m_vertSel != null) {
       m_vertSel.setPunto(pu);
-      if (m_liPBord != null) {
-        for (PlotBordo bo : m_liPBord)
-          bo.recalculate();
-      }
+      for (PlotBordo bo : m_dati.getPlotBordi())
+        bo.recalculate();
       bRepaint = true;
     }
     if (bRepaint)
@@ -170,48 +173,45 @@ public class PanProva extends JPanel {
   }
 
   private void disegnaBordi(Graphics2D p_g2) {
-    for (PlotBordo pbo : m_liPBord)
-      pbo.paintComponent(p_g2, m_trasp);
+    for (PlotBordo bo : m_dati.getPlotBordi())
+      bo.paintComponent(p_g2, m_trasp);
   }
 
   private void disegnaVertici(Graphics2D p_g2) {
-    for (PlotVertice pve : m_liPVert)
+    for (PlotVertice pve : m_dati.getPlotVertici())
       pve.paintComponent(p_g2, m_trasp);
   }
 
   private void caricaDati() {
-    m_liPVert = new ArrayList<>();
 
     Vertice ve1 = new Vertice("A");
     ve1.setPunto(new Punto(3, 6));
 
-    m_liPVert.add(new PlotVertice(ve1));
+    m_dati.addPlotVertice(new PlotVertice(ve1));
 
     Vertice ve2 = new Vertice("due");
     ve2.setPunto(new Point(7, 2));
-    m_liPVert.add(new PlotVertice(ve2));
+    m_dati.addPlotVertice(new PlotVertice(ve2));
 
     Vertice ve3 = new Vertice("Lungo");
     ve3.setPunto(new Point(7, 8));
-    m_liPVert.add(new PlotVertice(ve3));
+    m_dati.addPlotVertice(new PlotVertice(ve3));
 
     Vertice ve4 = new Vertice("steso");
     ve4.setPunto(new Point(15, 2));
-    m_liPVert.add(new PlotVertice(ve4));
-
-    m_liPBord = new ArrayList<>();
+    m_dati.addPlotVertice(new PlotVertice(ve4));
 
     Bordo bo = new Bordo(ve1, ve2, 23);
     ve1.addBordo(bo);
-    m_liPBord.add(new PlotBordo(bo));
+    m_dati.addPlotBordo(new PlotBordo(bo));
 
     bo = new Bordo(ve2, ve3, 13);
     ve2.addBordo(bo);
-    m_liPBord.add(new PlotBordo(bo));
+    m_dati.addPlotBordo(new PlotBordo(bo));
 
     bo = new Bordo(ve2, ve4, 17);
     ve2.addBordo(bo);
-    m_liPBord.add(new PlotBordo(bo));
+    m_dati.addPlotBordo(new PlotBordo(bo));
 
   }
 

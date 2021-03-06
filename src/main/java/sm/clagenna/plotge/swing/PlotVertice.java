@@ -139,6 +139,10 @@ public class PlotVertice {
     return m_vert.isEnd();
   }
 
+  public Vertice getVertice() {
+    return m_vert;
+  }
+
   public boolean checkBersaglio(Punto p_pu) {
     Punto lPu = m_vert.getPunto();
     double dx = Math.abs(p_pu.getPx() - lPu.getPx());
