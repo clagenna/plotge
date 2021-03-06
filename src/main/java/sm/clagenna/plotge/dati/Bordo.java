@@ -8,8 +8,8 @@ public class Bordo implements Comparable<Bordo> {
   @Getter private transient Vertice          verticeA;
 
   /** questi 2 campi servono *solo* per la serializzazione con GSon */
-  @SuppressWarnings("unused") private String idVerticeDa;
-  @SuppressWarnings("unused") private String idVerticeA;
+  private String idVerticeDa;
+  private String idVerticeA;
 
   @Getter
   @Setter private int                        peso;

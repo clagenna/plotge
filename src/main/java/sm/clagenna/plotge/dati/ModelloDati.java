@@ -26,25 +26,30 @@ import sm.clagenna.plotge.swing.PlotVertice;
 public class ModelloDati implements Serializable, PropertyChangeListener {
 
   /** serialVersionUID long */
-  private static final long                 serialVersionUID = -3983127751832007743L;
-  private static final Logger               s_log            = LogManager.getLogger(ModelloDati.class);
+  private static final long              serialVersionUID = -3983127751832007743L;
+  private static final Logger            s_log            = LogManager.getLogger(ModelloDati.class);
 
-  private List<Vertice>                     m_liVertici;
-  private transient Map<String, Vertice>    m_mapVerts;
-
-  @Getter
-  @Setter private transient Vertice         startVert;
-  @Getter
-  @Setter private transient Vertice         endVert;
-  transient private Vertice                 m_veLastAdded;
-
-  private List<Bordo>                       m_liBordi;
-
-  private transient List<PlotVertice>       m_liPVert;
-  private transient List<PlotBordo>         m_liPBord;
+  /** viene serializzata con GSon */
+  private List<Vertice>                  liVertici;
+  private transient Map<String, Vertice> m_mapVerts;
 
   @Getter
-  @Setter transient private double          zoom;
+  @Setter
+  private transient Vertice              startVert;
+  @Getter
+  @Setter
+  private transient Vertice              endVert;
+  @SuppressWarnings("unused")
+  transient private Vertice              m_veLastAdded;
+  /** viene serializzata con GSon */
+  private List<Bordo>                    liBordi;
+
+  private transient List<PlotVertice>    m_liPVert;
+  private transient List<PlotBordo>      m_liPBord;
+
+  @Getter
+  @Setter
+  transient private double               zoom;
 
   public ModelloDati() {
     initialize();
@@ -57,13 +62,13 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   public void addVertice(Vertice p_v) {
     if (p_v == null)
       return;
-    if (m_liVertici == null)
-      m_liVertici = new ArrayList<Vertice>();
+    if (liVertici == null)
+      liVertici = new ArrayList<Vertice>();
     if (m_mapVerts == null)
       m_mapVerts = new HashMap<>();
     m_mapVerts.put(p_v.getId(), p_v);
-    if ( !m_liVertici.contains(p_v))
-      m_liVertici.add(p_v);
+    if ( !liVertici.contains(p_v))
+      liVertici.add(p_v);
     if (startVert == null)
       startVert = p_v;
     m_veLastAdded = p_v;
@@ -72,10 +77,10 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   public void addBordo(Bordo p_v) {
     if (p_v == null)
       return;
-    if (m_liBordi == null)
-      m_liBordi = new ArrayList<Bordo>();
-    if ( !m_liBordi.contains(p_v))
-      m_liBordi.add(p_v);
+    if (liBordi == null)
+      liBordi = new ArrayList<Bordo>();
+    if ( !liBordi.contains(p_v))
+      liBordi.add(p_v);
   }
 
   public void addPlotVertice(PlotVertice pv) {
@@ -115,10 +120,10 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
       jso.toJson(this, fwri);
       String sz = String.format("Scritto file \"%s\"", p_fi.getAbsoluteFile());
-      s_log.info(sz);
+      ModelloDati.s_log.info(sz);
     } catch (Exception l_e) {
       String sz = String.format("Errore %s salvando \"%s\"", l_e.getMessage(), p_fi.getAbsoluteFile());
-      s_log.error(sz);
+      ModelloDati.s_log.error(sz);
     }
   }
 
@@ -134,13 +139,13 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
     } catch (Exception l_e) {
       String sz = String.format("Errore %s legendo \"%s\"", l_e.getMessage(), p_fi.getAbsoluteFile());
-      s_log.error(sz, l_e);
+      ModelloDati.s_log.error(sz, l_e);
     }
   }
 
   private void leggiDa(ModelloDati p_data) {
     m_mapVerts = new HashMap<>();
-    for (Vertice ve : p_data.m_liVertici) {
+    for (Vertice ve : p_data.liVertici) {
       PlotVertice pve = new PlotVertice(ve);
       addPlotVertice(pve);
       if (pve.isStart())
@@ -150,7 +155,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
       m_mapVerts.put(ve.getId(), ve);
     }
 
-    for (Bordo bo : p_data.m_liBordi) {
+    for (Bordo bo : p_data.liBordi) {
       Vertice vDa = m_mapVerts.get(bo.getIdVerticeDa());
       Vertice vA = m_mapVerts.get(bo.getIdVerticeA());
       Bordo b2 = new Bordo(vDa, vA, bo.getPeso());
@@ -175,7 +180,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
-    s_log.debug("Evento {} su {}", p_evt.getPropertyName(), p_evt.getSource().getClass().getSimpleName());
+    ModelloDati.s_log.debug("Evento {} su {}", p_evt.getPropertyName(), p_evt.getSource().getClass().getSimpleName());
   }
 
 }
