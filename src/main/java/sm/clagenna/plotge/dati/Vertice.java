@@ -22,7 +22,6 @@ public class Vertice implements Comparable<Vertice> {
   @Getter
   @Setter private boolean                               end;
 
-  @Getter
   @Setter private transient boolean                     cieco;
 
   @Getter
@@ -48,6 +47,12 @@ public class Vertice implements Comparable<Vertice> {
 
   public Punto getPunto() {
     return punto;
+  }
+
+  public boolean isCieco() {
+    if (isEnd())
+      return false;
+    return cieco;
   }
 
   @Override

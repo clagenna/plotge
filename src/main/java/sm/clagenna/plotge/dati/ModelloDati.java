@@ -160,6 +160,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
       Vertice vA = m_mapVerts.get(bo.getIdVerticeA());
       Bordo b2 = new Bordo(vDa, vA, bo.getPeso());
       b2.setShortNo(bo.getShortNo());
+      vDa.addBordo(b2);
       addPlotBordo(new PlotBordo(b2));
     }
     controllaCiechi();
