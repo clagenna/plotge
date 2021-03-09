@@ -112,6 +112,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     m_nTasto = p_e.getButton() * 10 + p_e.getClickCount();
 
     switch (m_nTasto) {
+      
       case 11: // sin + sing. click
       {
         for (PlotVertice ve : m_dati.getPlotVertici())
