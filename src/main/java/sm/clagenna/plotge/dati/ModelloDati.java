@@ -20,36 +20,36 @@ import com.google.gson.stream.JsonReader;
 
 import lombok.Getter;
 import lombok.Setter;
+import sm.clagenna.plotge.enumerati.EPropChange;
 import sm.clagenna.plotge.swing.PlotBordo;
 import sm.clagenna.plotge.swing.PlotVertice;
+import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 
 public class ModelloDati implements Serializable, PropertyChangeListener {
 
   /** serialVersionUID long */
-  private static final long              serialVersionUID = -3983127751832007743L;
-  private static final Logger            s_log            = LogManager.getLogger(ModelloDati.class);
+  private static final long                             serialVersionUID = -3983127751832007743L;
+  private static final Logger                           s_log            = LogManager.getLogger(ModelloDati.class);
 
   /** viene serializzata con GSon */
-  private List<Vertice>                  liVertici;
-  private transient Map<String, Vertice> m_mapVerts;
+  private List<Vertice>                                 liVertici;
+  private transient Map<String, Vertice>                m_mapVerts;
 
   @Getter
-  @Setter
-  private transient Vertice              startVert;
+  @Setter private transient Vertice                     startVert;
   @Getter
-  @Setter
-  private transient Vertice              endVert;
-  @SuppressWarnings("unused")
-  transient private Vertice              m_veLastAdded;
+  @Setter private transient Vertice                     endVert;
+  @SuppressWarnings("unused") transient private Vertice m_veLastAdded;
   /** viene serializzata con GSon */
-  private List<Bordo>                    liBordi;
+  private List<Bordo>                                   liBordi;
 
-  private transient List<PlotVertice>    m_liPVert;
-  private transient List<PlotBordo>      m_liPBord;
+  private transient List<PlotVertice>                   m_liPVert;
+  private transient List<PlotBordo>                     m_liPBord;
+  @Getter
+  @Setter private transient File                        fileDati;
 
   @Getter
-  @Setter
-  transient private double               zoom;
+  @Setter transient private double                      zoom;
 
   public ModelloDati() {
     initialize();
@@ -99,6 +99,47 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
     addBordo(bo);
   }
 
+  /**
+   * Crea un nuovo vertice nella posizione specificata dal punto
+   *
+   * @param p_pu
+   * @return
+   */
+  public PlotVertice nuovoVertice(Punto p_pu) {
+    Vertice ver = new Vertice();
+    ver.setPunto(p_pu);
+    PlotVertice ret = new PlotVertice(ver);
+    addPlotVertice(ret);
+    return ret;
+  }
+
+  public Vertice findVertice(String p_id) {
+    Vertice ve = null;
+    if (m_mapVerts != null && m_mapVerts.containsKey(p_id))
+      ve = m_mapVerts.get(p_id);
+    return ve;
+  }
+
+  public PlotVertice checkBersaglioVertice(Punto p_pu) {
+    PlotVertice ret = null;
+    for (PlotVertice ve : getPlotVertici())
+      if (ve.checkBersaglio(p_pu)) {
+        ret = ve;
+        break;
+      }
+    return ret;
+  }
+
+  public PlotBordo checkBersaglioBordo(Punto p_pu) {
+    PlotBordo ret = null;
+    for (PlotBordo bo : getPlotBordi())
+      if (bo.checkBersaglio(p_pu)) {
+        ret = bo;
+        break;
+      }
+    return ret;
+  }
+
   public List<PlotVertice> getPlotVertici() {
     if (m_liPVert == null)
       m_liPVert = new ArrayList<>();
@@ -129,6 +170,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
   public void leggiFile(File p_fi) {
     try (JsonReader frea = new JsonReader(new FileReader(p_fi))) {
+      setFileDati(p_fi);
       Gson jso = new GsonBuilder() //
           // .excludeFieldsWithoutExposeAnnotation() //
           .setPrettyPrinting() //
@@ -136,7 +178,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
       ModelloDati data = jso.fromJson(frea, ModelloDati.class);
       leggiDa(data);
-
+      PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.leggiFile);
     } catch (Exception l_e) {
       String sz = String.format("Errore %s legendo \"%s\"", l_e.getMessage(), p_fi.getAbsoluteFile());
       ModelloDati.s_log.error(sz, l_e);

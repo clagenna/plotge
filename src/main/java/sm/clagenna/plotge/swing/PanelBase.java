@@ -19,9 +19,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
 
+import sm.clagenna.plotge.dati.Bordo;
 import sm.clagenna.plotge.dati.ModelloDati;
 import sm.clagenna.plotge.dati.Punto;
 import sm.clagenna.plotge.dati.TrasponiFinestra;
+import sm.clagenna.plotge.dati.Vertice;
+import sm.clagenna.plotge.enumerati.EMouseGesture;
 import sm.clagenna.plotge.enumerati.EPropChange;
 import sm.clagenna.plotge.sys.AppProperties;
 import sm.clagenna.plotge.sys.MioFileFilter;
@@ -30,16 +33,20 @@ import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 public class PanelBase extends JPanel implements PropertyChangeListener {
 
   /** serialVersionUID long */
-  private static final long                            serialVersionUID = 5653594504599665379L;
+  private static final long         serialVersionUID = 5653594504599665379L;
 
-  private ModelloDati                                  m_dati;
-  @SuppressWarnings("unused") private TrasponiFinestra m_trasp;
-  private PropertyChangeBroadcaster                    m_broadc;
+  private ModelloDati               m_dati;
+  private TrasponiFinestra          m_trasp;
+  private PropertyChangeBroadcaster m_broadc;
   /** vertice selezionato sul grafo */
-  private PlotVertice                                  m_selVert;
+  private PlotVertice               m_selVert;
   /** il bordo selezionato sul grafo */
-  private PlotBordo                                    m_selBordo;
-  private int                                          m_nTasto;
+  private PlotBordo                 m_selBordo;
+  private int                       m_nTasto;
+
+  private PlotVertice               m_primoCerchio;
+  private PlotVertice               m_secondoCerchio;
+  private Punto                     m_secondoPunto;
 
   public PanelBase() {
     initialize();
@@ -98,6 +105,10 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   }
 
   protected void locMousePress(MouseEvent p_e) {
+    // solo se creo nuovo bordo
+    m_primoCerchio = null;
+    m_secondoCerchio = null;
+    // ------------------------
     Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
     double lx1 = pu.getX();
     double ly1 = pu.getY();
@@ -107,29 +118,38 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
       m_selVert.setSelected(false);
     m_selBordo = null;
     m_selVert = null;
-    // 12 = tasto sin. + doppio click
     // 31 = tasto destro + singolo click
     m_nTasto = p_e.getButton() * 10 + p_e.getClickCount();
+    EMouseGesture eg = EMouseGesture.valueOf(m_nTasto);
 
-    switch (m_nTasto) {
-      
-      case 11: // sin + sing. click
-      {
-        for (PlotVertice ve : m_dati.getPlotVertici())
-          if (ve.checkBersaglio(pu)) {
-            m_selVert = ve;
-            break;
-          }
-        if (m_selVert == null) {
-          for (PlotBordo bo : m_dati.getPlotBordi())
-            if (bo.checkBersaglio(pu)) {
-              m_selBordo = bo;
-              break;
-            }
-        }
+    switch (eg) {
+
+      case SingClickSinistro: {
+        m_selVert = m_dati.checkBersaglioVertice(pu);
+        if (m_selVert == null)
+          m_selBordo = m_dati.checkBersaglioBordo(pu);
       }
         break;
-      case 31: // destro + sing. click
+      case DoppClickSinistro:
+        break;
+
+      case SingClickCentrale:
+        break;
+      case DoppClickCentrale:
+        break;
+
+      case SingClickDestro:
+        m_primoCerchio = m_dati.checkBersaglioVertice(pu);
+        if (m_primoCerchio != null)
+          System.out.println("Clck3:" + m_primoCerchio.toString());
+        break;
+      case DoppClickDestro:
+        if (m_selVert != null)
+          m_selVert.setSelected(false);
+        m_selVert = m_dati.nuovoVertice(pu);
+        break;
+
+      default:
         break;
     }
 
@@ -155,20 +175,89 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
 
   protected void locMouseDragged(MouseEvent p_e) {
     boolean bRepaint = false;
+    // vale il tasto di #locMousePressed
+    // m_nTasto = p_e.getButton() * 10 + p_e.getClickCount();
+    EMouseGesture eg = EMouseGesture.valueOf(m_nTasto);
     Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
-    if (m_selVert != null) {
-      m_selVert.setPunto(pu);
-      for (PlotBordo bo : m_dati.getPlotBordi())
-        bo.recalculate();
-      bRepaint = true;
+
+    switch (eg) {
+
+      case SingClickSinistro:
+        if (m_selVert != null)
+          m_selVert.setPunto(pu);
+        break;
+      case DoppClickSinistro:
+        break;
+
+      case SingClickCentrale:
+        break;
+      case DoppClickCentrale:
+        break;
+
+      case SingClickDestro:
+        if (m_primoCerchio != null) {
+          m_secondoCerchio = m_dati.checkBersaglioVertice(pu);
+          m_secondoPunto = pu;
+          // System.out.println("dragP:" + m_secondoPunto.toString());
+        }
+        if (m_secondoCerchio != null) {
+          if (m_secondoCerchio.equals(m_primoCerchio))
+            m_secondoCerchio = null;
+          //          else
+          //            System.out.println("Drag3:" + m_secondoCerchio.toString());
+        }
+        break;
+      case DoppClickDestro:
+        break;
+
+      default:
+        break;
+
     }
+    bRepaint = m_selVert != null;
+    bRepaint |= m_primoCerchio != null;
+
     if (bRepaint)
       repaint();
   }
 
   protected void locMouseRelease(MouseEvent p_e) {
-    // TODO Auto-generated method stub
+    boolean bRepaint = false;
+    m_nTasto = p_e.getButton() * 10 + p_e.getClickCount();
+    EMouseGesture eg = EMouseGesture.valueOf(m_nTasto);
+    Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
+    m_secondoPunto = null;
 
+    switch (eg) {
+
+      case SingClickSinistro:
+        break;
+      case DoppClickSinistro:
+        break;
+
+      case SingClickCentrale:
+        break;
+      case DoppClickCentrale:
+        break;
+
+      case SingClickDestro:
+        m_secondoCerchio = m_dati.checkBersaglioVertice(pu);
+        break;
+      case DoppClickDestro:
+        break;
+
+      default:
+        break;
+    }
+    if (m_primoCerchio != null && m_secondoCerchio != null) {
+      Vertice v1 = m_dati.findVertice(m_primoCerchio.getId());
+      Vertice v2 = m_dati.findVertice(m_secondoCerchio.getId());
+      PlotBordo bo = new PlotBordo(new Bordo(v1, v2, 1));
+      m_dati.addPlotBordo(bo);
+      bRepaint = true;
+    }
+    if (bRepaint)
+      repaint();
   }
 
   protected void locMouseWheelMoved(MouseWheelEvent p_e) {
@@ -266,6 +355,18 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   private void disegnaBordi(Graphics2D p_g2) {
     for (PlotBordo bo : m_dati.getPlotBordi())
       bo.paintComponent(p_g2, m_trasp);
+    System.out.printf("disb: primo(%s) \tsecon(%s)\n", //
+        (m_primoCerchio == null ? "*NULL*" : m_primoCerchio.getPunto().toString()), //
+        (m_secondoPunto == null ? "*NULL*" : m_secondoPunto.toString()) //
+    );
+    if (m_primoCerchio != null && m_secondoPunto != null) {
+      Punto p1 = m_trasp.convertiW(m_primoCerchio.getPunto());
+      Punto p2 = m_secondoPunto;
+      p_g2.drawLine(p1.getWx(), p1.getWy(), p2.getWx(), p2.getWy());
+
+      System.out.printf("paint line (%d, %d) - (%d, %d)\n", //
+          p1.getWx(), p1.getWy(), p2.getWx(), p2.getWy());
+    }
   }
 
   private void disegnaVertici(Graphics2D p_g2) {

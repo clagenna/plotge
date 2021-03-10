@@ -17,6 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSplitPane;
 
+import sm.clagenna.plotge.enumerati.EPropChange;
 import sm.clagenna.plotge.sys.AppProperties;
 import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 
@@ -187,7 +188,24 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener {
 
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
+    String szNam = p_evt.getPropertyName();
+    if (szNam == null)
+      return;
+    EPropChange pch = EPropChange.valueOf(p_evt.getPropertyName());
+    switch (pch) {
+      case leggiFile:
+        break;
+      default:
+        break;
+    }
 
   }
 
+  @Override
+  public String getTitle() {
+    String sz = super.getTitle();
+    dat = getDati();
+    return sz;
+  }
+  
 }
