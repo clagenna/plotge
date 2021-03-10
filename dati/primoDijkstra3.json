@@ -14,6 +14,7 @@
     {
       "id": "2",
       "punto": {
+<<<<<<< HEAD
         "px": 14.513761467889905,
         "py": 4.816513761467889,
         "x": 226,
@@ -297,6 +298,245 @@
     {
       "idVerticeDa": "2",
       "idVerticeA": "8",
+=======
+        "px": 17.08,
+        "py": 4.27,
+        "x": 244,
+        "y": 565
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "3",
+      "punto": {
+        "px": 30.0,
+        "py": 14.0,
+        "x": 0,
+        "y": 0
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "4",
+      "punto": {
+        "px": 27.372413793103465,
+        "py": 25.103448275862085,
+        "x": 567,
+        "y": 257
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "5",
+      "punto": {
+        "px": 37.449999999999996,
+        "py": 30.029999999999994,
+        "x": 535,
+        "y": 197
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "6",
+      "punto": {
+        "px": 13.0,
+        "py": 14.0,
+        "x": 0,
+        "y": 0
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "7",
+      "punto": {
+        "px": 7.0,
+        "py": 29.0,
+        "x": 0,
+        "y": 0
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "8",
+      "punto": {
+        "px": 28.0,
+        "py": 6.0,
+        "x": 0,
+        "y": 0
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "9",
+      "punto": {
+        "px": 21.279999999999998,
+        "py": 31.009999999999994,
+        "x": 304,
+        "y": 183
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "10",
+      "punto": {
+        "px": 37.0,
+        "py": 34.0,
+        "x": 0,
+        "y": 0
+      },
+      "start": false,
+      "end": false
+    },
+    {
+      "id": "11",
+      "punto": {
+        "px": 48.0,
+        "py": 21.0,
+        "x": 0,
+        "y": 0
+      },
+      "start": false,
+      "end": true
+    },
+    {
+      "id": "12",
+      "punto": {
+        "px": 24.0,
+        "py": 36.0,
+        "x": 0,
+        "y": 0
+      },
+      "start": false,
+      "end": false
+    }
+  ],
+  "liBordi": [
+    {
+      "idVerticeDa": "1",
+      "idVerticeA": "2",
+      "peso": 7,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "2",
+      "idVerticeA": "3",
+      "peso": 13,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "3",
+      "idVerticeA": "4",
+      "peso": 41,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "2",
+      "idVerticeA": "5",
+      "peso": 17,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "3",
+      "idVerticeA": "8",
+      "peso": 8,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "4",
+      "idVerticeA": "10",
+      "peso": 1,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "2",
+      "idVerticeA": "6",
+      "peso": 1,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "6",
+      "idVerticeA": "11",
+      "peso": 44,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "6",
+      "idVerticeA": "7",
+      "peso": 2,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "7",
+      "idVerticeA": "9",
+      "peso": 2,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "4",
+      "idVerticeA": "9",
+      "peso": 2,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "8",
+      "idVerticeA": "11",
+      "peso": 61,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "10",
+      "idVerticeA": "11",
+      "peso": 3,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "5",
+      "idVerticeA": "11",
+      "peso": 18,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "7",
+      "idVerticeA": "8",
+      "peso": 57,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "7",
+      "idVerticeA": "12",
+      "peso": 61,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "12",
+      "idVerticeA": "10",
+      "peso": 1,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "1",
+      "idVerticeA": "5",
+      "peso": 91,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "1",
+      "idVerticeA": "7",
+      "peso": 41,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "9",
+      "idVerticeA": "5",
+>>>>>>> branch 'master' of ssh://gituser@nascasa/volume1/git/plotge
       "peso": 1,
       "shortNo": 0
     }

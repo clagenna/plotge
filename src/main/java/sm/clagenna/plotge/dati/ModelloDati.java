@@ -160,6 +160,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
           .create();
 
       jso.toJson(this, fwri);
+      PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.leggiFile);
       String sz = String.format("Scritto file \"%s\"", p_fi.getAbsoluteFile());
       ModelloDati.s_log.info(sz);
     } catch (Exception l_e) {
