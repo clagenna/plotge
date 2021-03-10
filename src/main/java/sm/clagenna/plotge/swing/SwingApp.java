@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -17,6 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSplitPane;
 
+import sm.clagenna.plotge.dati.ModelloDati;
 import sm.clagenna.plotge.enumerati.EPropChange;
 import sm.clagenna.plotge.sys.AppProperties;
 import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
@@ -189,23 +191,34 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
     String szNam = p_evt.getPropertyName();
+    String szTit = getTitle();
+    System.out.println("SwingApp.propertyChange():" + p_evt.toString());
     if (szNam == null)
       return;
     EPropChange pch = EPropChange.valueOf(p_evt.getPropertyName());
     switch (pch) {
+      
       case leggiFile:
+        szNam=p_evt.getSource().toString();
+        szTit = String.format("Shortest Path file: %s", szNam);
+        setTitle(szTit);
         break;
+        
       default:
         break;
     }
-
   }
 
   @Override
   public String getTitle() {
     String sz = super.getTitle();
-    dat = getDati();
+    ModelloDati dat = getDati();
+    File fi = null;
+    if (dat != null)
+      fi = dat.getFileDati();
+    if (fi != null)
+      sz = String.format("Shortest path file:" + fi.getAbsolutePath());
     return sz;
   }
-  
+
 }
