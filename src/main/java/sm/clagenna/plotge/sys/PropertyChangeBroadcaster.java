@@ -57,17 +57,11 @@ public class PropertyChangeBroadcaster {
   }
 
   public void broadCast(Object p_cls, EPropChange p_prop) {
-    broadCast(p_cls, p_prop.name());
+    broadCast(p_cls, p_prop, null);
   }
 
-  public void broadCast(Object p_cls, String p_prop) {
-    PropertyChangeEvent p_evt = new PropertyChangeEvent(p_cls, p_prop, null, null);
-    broadCast(p_evt);
-  }
-
-  public void broadCast(PropertyChangeEvent p_evt) {
-    if (p_evt == null)
-      return;
+  public void broadCast(Object p_cls, EPropChange p_prop, Object newValue) {
+    PropertyChangeEvent p_evt = new PropertyChangeEvent(p_cls, null, p_prop, newValue);
     if (isBroadcastPropEventChange())
       return;
 

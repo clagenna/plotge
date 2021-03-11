@@ -19,6 +19,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileSystemView;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import sm.clagenna.plotge.dati.Bordo;
 import sm.clagenna.plotge.dati.ModelloDati;
 import sm.clagenna.plotge.dati.Punto;
@@ -34,6 +37,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
 
   /** serialVersionUID long */
   private static final long         serialVersionUID = 5653594504599665379L;
+  private static final Logger       s_log            = LogManager.getLogger(PanelBase.class);
 
   private ModelloDati               m_dati;
   private TrasponiFinestra          m_trasp;
@@ -100,8 +104,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
 
   protected void locComponentResized(ComponentEvent p_e) {
     Dimension dim = p_e.getComponent().getSize();
-    PropertyChangeEvent ev = new PropertyChangeEvent(this, null, EPropChange.panelRezized, dim);
-    PropertyChangeBroadcaster.getInst().broadCast(ev);
+    PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.panelRezized, dim);
   }
 
   protected void locMousePress(MouseEvent p_e) {
@@ -112,6 +115,8 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
     double lx1 = pu.getX();
     double ly1 = pu.getY();
+    PropertyChangeBroadcaster bcst = PropertyChangeBroadcaster.getInst();
+
     if (m_selBordo != null)
       m_selBordo.setSelected(false);
     if (m_selVert != null)
@@ -167,6 +172,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     if (m_selVert != null) {
       m_selVert.setSelected(true);
       bRepaint = true;
+      bcst.broadCast(m_selVert, EPropChange.selectVertice);
     }
     if (bRepaint)
       repaint();
@@ -270,7 +276,33 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     }
   }
 
-  public void leggiFile() {
+  public void leggiFile(File p_fi) {
+    File retFi = p_fi;
+    if (retFi == null)
+      retFi = apriFileChooser("Dammi il nome file JSON da leggere", true);
+    if (retFi == null)
+      return;
+    m_broadc.removePropertyChangeListener(m_dati);
+    m_dati = new ModelloDati();
+    m_dati.leggiFile(retFi);
+    repaint();
+
+  }
+
+  public void salvaFile(File p_fi) {
+    File retFi = p_fi;
+    if (retFi == null)
+      retFi = apriFileChooser("Dammi il nome file JSON da leggere", false);
+    if (retFi == null)
+      return;
+
+    System.out.println("PanelBase.salvaFile():" + retFi.getAbsolutePath());
+    m_dati.salvaFile(retFi);
+
+  }
+
+  private File apriFileChooser(String p_titolo, boolean bRead) {
+    File retFi = null;
     JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
     jfc.setDialogTitle("Dammi il nome file JSON da leggere");
     jfc.setMultiSelectionEnabled(false);
@@ -282,50 +314,19 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     String sz = props.getLastDir();
     if (sz != null)
       jfc.setCurrentDirectory(new File(sz));
-
-    int returnValue = jfc.showOpenDialog(this);
+    int returnValue = 0;
+    if (bRead)
+      returnValue = jfc.showOpenDialog(this);
+    else
+      returnValue = jfc.showSaveDialog(this);
     if (returnValue == JFileChooser.APPROVE_OPTION) {
-      File fi = jfc.getSelectedFile();
-      props.setLastFile(fi.getAbsolutePath());
+      retFi = jfc.getSelectedFile();
+      props.setLastFile(retFi.getAbsolutePath());
       File fi2 = jfc.getCurrentDirectory();
       props.setLastDir(fi2.getAbsolutePath());
-
-      System.out.println("PanelBase.leggiFile():" + fi.getAbsolutePath());
-      //      m_bDragging = false;
-      //      m_cerchio = null;
-      //      m_primoCerchio = null;
-      //      m_secondoCerchio = null;
-      //      m_nTasto = 0;
-      m_broadc.removePropertyChangeListener(m_dati);
-      m_dati = new ModelloDati();
-      m_dati.leggiFile(fi);
-      repaint();
+      s_log.info("Letto file: {}", retFi.getAbsolutePath());
     }
-
-  }
-
-  public void salvaFile() {
-    JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-    jfc.setDialogTitle("Dammi il nome file JSON su cui salvare");
-    jfc.setMultiSelectionEnabled(false);
-    jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-    MioFileFilter json = new MioFileFilter("json file", ".json");
-    jfc.addChoosableFileFilter(json);
-
-    AppProperties props = AppProperties.getInst();
-    String sz = props.getLastDir();
-    if (sz != null)
-      jfc.setCurrentDirectory(new File(sz));
-    int returnValue = jfc.showSaveDialog(this);
-    if (returnValue == JFileChooser.APPROVE_OPTION) {
-      File fi = jfc.getSelectedFile();
-      props.setLastFile(fi.getAbsolutePath());
-      File fi2 = jfc.getCurrentDirectory();
-      props.setLastDir(fi2.getAbsolutePath());
-      System.out.println("PanelBase.salvaFile():" + fi.getAbsolutePath());
-      m_dati.salvaFile(fi);
-    }
+    return retFi;
   }
 
   @Override
@@ -355,17 +356,16 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   private void disegnaBordi(Graphics2D p_g2) {
     for (PlotBordo bo : m_dati.getPlotBordi())
       bo.paintComponent(p_g2, m_trasp);
-    System.out.printf("disb: primo(%s) \tsecon(%s)\n", //
-        (m_primoCerchio == null ? "*NULL*" : m_primoCerchio.getPunto().toString()), //
-        (m_secondoPunto == null ? "*NULL*" : m_secondoPunto.toString()) //
-    );
+    //    System.out.printf("disb: primo(%s) \tsecon(%s)\n", //
+    //        (m_primoCerchio == null ? "*NULL*" : m_primoCerchio.getPunto().toString()), //
+    //        (m_secondoPunto == null ? "*NULL*" : m_secondoPunto.toString()) //
+    //    );
     if (m_primoCerchio != null && m_secondoPunto != null) {
       Punto p1 = m_trasp.convertiW(m_primoCerchio.getPunto());
       Punto p2 = m_secondoPunto;
       p_g2.drawLine(p1.getWx(), p1.getWy(), p2.getWx(), p2.getWy());
-
-      System.out.printf("paint line (%d, %d) - (%d, %d)\n", //
-          p1.getWx(), p1.getWy(), p2.getWx(), p2.getWy());
+      //      System.out.printf("paint line (%d, %d) - (%d, %d)\n", //
+      //          p1.getWx(), p1.getWy(), p2.getWx(), p2.getWy());
     }
   }
 

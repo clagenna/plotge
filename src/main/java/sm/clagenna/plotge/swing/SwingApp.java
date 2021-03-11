@@ -16,14 +16,17 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 
+import sm.clagenna.plotge.dati.MenuFiles;
 import sm.clagenna.plotge.dati.ModelloDati;
 import sm.clagenna.plotge.enumerati.EPropChange;
+import sm.clagenna.plotge.interf.IGestFile;
 import sm.clagenna.plotge.sys.AppProperties;
 import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 
-public class SwingApp extends MainJFrame implements PropertyChangeListener {
+public class SwingApp extends MainJFrame implements PropertyChangeListener, IGestFile {
 
   /** serialVersionUID long */
   private static final long         serialVersionUID = -3372037517230384176L;
@@ -40,6 +43,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener {
   private JMenuItem                 m_mnuShortestPath;
   private JMenuItem                 m_mnuRevertPaths;
   private PropertyChangeBroadcaster m_bcst;
+  private MenuFiles                 m_filesMenu;
+  private JMenu                     m_mnUltimiFiles;
 
   public SwingApp(String p_tit) {
     super(p_tit);
@@ -47,7 +52,9 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener {
 
   @Override
   protected void creaComponents() {
-
+ 
+    m_filesMenu = MenuFiles.getInst();
+    
     m_bcst = PropertyChangeBroadcaster.getInst();
     m_bcst.addPropertyChangeListener(this);
 
@@ -94,6 +101,13 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener {
       }
     });
     m_menu.add(m_mnuSalva);
+
+    m_mnUltimiFiles = new JMenu("Ultimi Files");
+    m_menu.add(m_mnUltimiFiles);
+    m_filesMenu.creaElenco(this, m_mnUltimiFiles);
+
+    JSeparator separator = new JSeparator();
+    m_menu.add(separator);
 
     m_mnuEsci = new JMenuItem("Esci", createImageIcon("exit.png", "Esci dal applicazione"));
     m_mnuEsci.setMnemonic('E');
@@ -143,16 +157,28 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener {
     try {
       System.out.println("SwingApp.mnuLeggiClick()");
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      m_panRight.leggiFile();
+      m_panRight.leggiFile(null);
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
   }
 
+  @Override
+  public void apriFile(File p_fi) {
+    try {
+      System.out.println("SwingApp.mnuLeggiClick()");
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      m_panRight.leggiFile(p_fi);
+    } finally {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+    
+  }
+
   protected void mnuSalvaClick() {
     try {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-      m_panRight.salvaFile();
+      m_panRight.salvaFile(null);
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
@@ -195,15 +221,15 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener {
     System.out.println("SwingApp.propertyChange():" + p_evt.toString());
     if (szNam == null)
       return;
-    EPropChange pch = EPropChange.valueOf(p_evt.getPropertyName());
+    EPropChange pch = (EPropChange) p_evt.getOldValue();
     switch (pch) {
-      
+
       case leggiFile:
-        szNam=p_evt.getSource().toString();
+        szNam = p_evt.getSource().toString();
         szTit = String.format("Shortest Path file: %s", szNam);
         setTitle(szTit);
         break;
-        
+
       default:
         break;
     }

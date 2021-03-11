@@ -24,6 +24,7 @@ public class AppProperties {
   public static final String         CSZ_PROP_DIMFRAME_Y = "frame.dimy";
   public static final String         CSZ_PROP_POSFRAME_X = "frame.posx";
   public static final String         CSZ_PROP_POSFRAME_Y = "frame.posy";
+  public static final String         CSZ_PROP_MENUFILE   = "menu.%d";
 
   private static AppProperties       s_inst;
 

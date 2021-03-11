@@ -1,6 +1,7 @@
 package sm.clagenna.plotge.swing;
 
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -32,7 +33,8 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
   private JTextField                m_txId;
   private JCheckBox                 m_ckStartPoint;
   private JCheckBox                 m_ckEndPoint;
-  // private PlotVertice                           m_ver;
+  private PlotVertice               m_ver;
+  private PlotBordo                 m_bordo;
   //   @SuppressWarnings("unused") private PlotBordo m_bordo;
   private JButton                   m_btSalvaVert;
   private PropertyChangeBroadcaster m_broadc;
@@ -48,16 +50,17 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
     GridBagLayout gridBagLayout = new GridBagLayout();
     gridBagLayout.columnWidths = new int[] { 62, 0, 0 };
-    gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0 };
+    gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
     gridBagLayout.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
-    gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+    gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
     setLayout(gridBagLayout);
 
-    JLabel lblNewLabel = new JLabel("Nome Vert.");
+    JLabel lblNewLabel = new JLabel("Nome Vertice");
+    lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
     GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-    gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-    gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
-    gbc_lblNewLabel.gridx = 0;
+    gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+    gbc_lblNewLabel.gridx = 1;
     gbc_lblNewLabel.gridy = 0;
     add(lblNewLabel, gbc_lblNewLabel);
 
@@ -66,7 +69,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     gbc_txId.insets = new Insets(0, 0, 5, 0);
     gbc_txId.fill = GridBagConstraints.HORIZONTAL;
     gbc_txId.gridx = 1;
-    gbc_txId.gridy = 0;
+    gbc_txId.gridy = 1;
     add(m_txId, gbc_txId);
     m_txId.setColumns(10);
 
@@ -82,7 +85,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     gbc_ckStartPoint.anchor = GridBagConstraints.WEST;
     gbc_ckStartPoint.insets = new Insets(0, 0, 5, 0);
     gbc_ckStartPoint.gridx = 1;
-    gbc_ckStartPoint.gridy = 1;
+    gbc_ckStartPoint.gridy = 2;
     add(m_ckStartPoint, gbc_ckStartPoint);
 
     m_ckEndPoint = new JCheckBox("End Point");
@@ -96,7 +99,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     gbc_chkEndPoint.insets = new Insets(0, 0, 5, 0);
     gbc_chkEndPoint.anchor = GridBagConstraints.WEST;
     gbc_chkEndPoint.gridx = 1;
-    gbc_chkEndPoint.gridy = 2;
+    gbc_chkEndPoint.gridy = 3;
     add(m_ckEndPoint, gbc_chkEndPoint);
 
     m_btSalvaVert = new JButton("Salva");
@@ -108,7 +111,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     });
     GridBagConstraints gbc_btSalvaVert = new GridBagConstraints();
     gbc_btSalvaVert.gridx = 1;
-    gbc_btSalvaVert.gridy = 3;
+    gbc_btSalvaVert.gridy = 4;
     add(m_btSalvaVert, gbc_btSalvaVert);
   }
 
@@ -149,26 +152,35 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
     Object obj = p_evt.getOldValue();
+    Object lv = p_evt.getSource();
     if ( ! (obj instanceof EPropChange))
       return;
     EPropChange pch = (EPropChange) obj;
     s_log.debug("Evento {} su {}", pch.toString(), p_evt.getSource().getClass().getSimpleName());
-    //    Object lv = p_evt.getSource();
-    //    if (lv instanceof PlotVertice) {
-    //      m_ver = (PlotVertice) lv;
-    //      m_bordo = null;
-    //      enableVertice(true);
-    //      enableBordo(false);
-    //      popolaVertice();
-    //    }
-    //    if (lv instanceof PlotBordo) {
-    //      m_ver = null;
-    //      m_bordo = (PlotBordo) lv;
-    //      enableVertice(false);
-    //      enableBordo(true);
-    //      popolaBordo();
-    //    }
 
+    switch (pch) {
+      case selectVertice:
+        if (lv instanceof PlotVertice) {
+          m_ver = (PlotVertice) lv;
+          m_bordo = null;
+          enableVertice(true);
+          enableBordo(false);
+          popolaVertice();
+        }
+        break;
+      case selectBordo:
+        if (lv instanceof PlotBordo) {
+          m_ver = null;
+          m_bordo = (PlotBordo) lv;
+          System.out.println("PanParmGeneral.propertyChange():" + m_bordo.toString());
+          enableVertice(false);
+          enableBordo(true);
+          popolaBordo();
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   private void enableVertice(boolean p_b) {
@@ -177,7 +189,6 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     m_ckEndPoint.setEnabled(p_b);
   }
 
-  @SuppressWarnings("unused")
   private void enableBordo(boolean p_b) {
     // abilita bordo
   }
@@ -188,12 +199,11 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
   }
 
-  @SuppressWarnings("unused")
   private void popolaVertice() {
-    //    var ver = m_ver.getVertice();
-    //    m_txId.setText(ver.getId());
-    //    m_ckStartPoint.setSelected(ver.isStart());
-    //    m_ckEndPoint.setSelected(ver.isEnd());
+    var ver = m_ver.getVertice();
+    m_txId.setText(ver.getId());
+    m_ckStartPoint.setSelected(ver.isStart());
+    m_ckEndPoint.setSelected(ver.isEnd());
   }
 
 }

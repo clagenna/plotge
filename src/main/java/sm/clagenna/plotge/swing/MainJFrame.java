@@ -13,6 +13,7 @@ import javax.swing.WindowConstants;
 import org.apache.logging.log4j.Logger;
 
 import lombok.Getter;
+import sm.clagenna.plotge.dati.MenuFiles;
 import sm.clagenna.plotge.dati.ModelloDati;
 import sm.clagenna.plotge.sys.AppProperties;
 import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
@@ -51,6 +52,7 @@ public abstract class MainJFrame extends JFrame {
     prop = new AppProperties();
     prop.openProperties();
     /* PropertyChangeBroadcaster bcst = */ new PropertyChangeBroadcaster();
+    new MenuFiles();
 
     int posX = prop.getPropIntVal(AppProperties.CSZ_PROP_POSFRAME_X);
     int posY = prop.getPropIntVal(AppProperties.CSZ_PROP_POSFRAME_Y);
