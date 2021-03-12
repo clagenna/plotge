@@ -24,7 +24,7 @@ public abstract class MainJFrame extends JFrame {
   private static final long     serialVersionUID = -1306277146009904565L;
   private static Logger         s_log;
   private static MainJFrame     s_inst;
-  @Getter private AppProperties prop;
+  @Getter AppProperties prop;
   @Getter private ModelloDati   dati;
   private Dimension             m_winDim;
   private Point                 m_winPos;

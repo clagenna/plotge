@@ -40,6 +40,10 @@ public class EquazLineare {
     calcolaEquazLineare();
   }
 
+  public static void setTolleranza(double p_v) {
+    sTolleranza = p_v;
+  }
+
   public void setPlotBordo(PlotBordo p_bo) {
     m_bo = p_bo;
     Bordo bo = p_bo.getBordo();
@@ -133,6 +137,9 @@ public class EquazLineare {
     double k1 = (ly - m_p1.getPy()) * (m_p2.getPx() - m_p1.getPx());
     double k2 = (m_p2.getPy() - m_p1.getPy()) * (lx - m_p1.getPx());
     double diff = Math.abs(k1 - k2);
+    
+    // if ( diff < 10. ) 
+      System.out.printf("equaz diff %.2f\n", diff);
 
     return diff < sTolleranza;
   }

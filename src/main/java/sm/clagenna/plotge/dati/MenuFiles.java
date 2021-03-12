@@ -46,7 +46,8 @@ public class MenuFiles {
 
   public void add(File p_fi) {
     if (m_queue.contains(p_fi))
-      return;
+      m_queue.remove(p_fi);
+    // se troppi elimino l'ultimo
     while (m_queue.size() >= s_maxfiles)
       m_queue.remove(m_queue.size() - 1);
     m_queue.add(0, p_fi);

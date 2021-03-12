@@ -25,6 +25,7 @@ public class AppProperties {
   public static final String         CSZ_PROP_POSFRAME_X = "frame.posx";
   public static final String         CSZ_PROP_POSFRAME_Y = "frame.posy";
   public static final String         CSZ_PROP_MENUFILE   = "menu.%d";
+  public static final String         CSZ_PROP_BO_TOLLER  = "bordo.tolleranza";  
 
   private static AppProperties       s_inst;
 

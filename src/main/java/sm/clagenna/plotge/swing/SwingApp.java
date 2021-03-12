@@ -52,9 +52,13 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
 
   @Override
   protected void creaComponents() {
- 
+    String sz = null;
     m_filesMenu = MenuFiles.getInst();
-    
+    AppProperties pr = getProp();
+    sz = pr.getPropVal(AppProperties.CSZ_PROP_BO_TOLLER);
+    if (sz != null)
+      EquazLineare.setTolleranza(Double.parseDouble(sz));
+
     m_bcst = PropertyChangeBroadcaster.getInst();
     m_bcst.addPropertyChangeListener(this);
 
@@ -172,7 +176,7 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
     } finally {
       this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
-    
+
   }
 
   protected void mnuSalvaClick() {
