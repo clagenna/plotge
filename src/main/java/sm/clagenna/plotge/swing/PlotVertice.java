@@ -162,4 +162,19 @@ public class PlotVertice {
     return sz;
   }
 
+  @Override
+  public boolean equals(Object p_obj) {
+    if (m_vert == null)
+      return false;
+    if (p_obj == null)
+      return false;
+    if ( ! (p_obj instanceof PlotVertice))
+      return false;
+    PlotVertice altro = (PlotVertice) p_obj;
+    if (altro.m_vert == null)
+      return false;
+
+    return m_vert.getId().equals(altro.m_vert.getId());
+  }
+
 }

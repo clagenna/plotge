@@ -147,6 +147,18 @@ public class PlotBordo {
     return bRet;
   }
 
+  /**
+   * Se il bordo fa riferimento al vertice proposto allora ricalcolo la
+   * {@link EquazLineare}
+   *
+   * @param p_ve
+   */
+  public void ricalcolaEquazLineare(PlotVertice p_ve) {
+    boolean afferisce = p_ve.equals(m_vDa) || p_ve.equals(m_vA);
+    if (afferisce)
+      recalculate();
+  }
+
   public Bordo getBordo() {
     return m_bordo;
   }

@@ -220,18 +220,18 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
 
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
-    String szNam = p_evt.getPropertyName();
+    String szNam = null;
     String szTit = getTitle();
     System.out.println("SwingApp.propertyChange():" + p_evt.toString());
-    if (szNam == null)
-      return;
+
     EPropChange pch = (EPropChange) p_evt.getOldValue();
     switch (pch) {
-
+      case scriviFile:
       case leggiFile:
-        szNam = p_evt.getSource().toString();
+        szNam = p_evt.getNewValue().toString();
         szTit = String.format("Shortest Path file: %s", szNam);
         setTitle(szTit);
+        m_filesMenu.creaElenco(this, m_mnUltimiFiles);
         break;
 
       default:

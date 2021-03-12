@@ -237,6 +237,10 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     switch (eg) {
 
       case SingClickSinistro:
+        if (m_selVert != null) {
+          m_selVert.setPunto(pu);
+          m_dati.recalcEquazLineare(m_selVert);
+        }
         break;
       case DoppClickSinistro:
         break;
@@ -324,7 +328,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
       props.setLastFile(retFi.getAbsolutePath());
       File fi2 = jfc.getCurrentDirectory();
       props.setLastDir(fi2.getAbsolutePath());
-      s_log.info("Letto file: {}", retFi.getAbsolutePath());
+      s_log.info("Scelto file: {}", retFi.getAbsolutePath());
     }
     return retFi;
   }

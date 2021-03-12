@@ -7,11 +7,15 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import sm.clagenna.plotge.dati.Bordo;
 import sm.clagenna.plotge.dati.Punto;
 import sm.clagenna.plotge.dati.Vertice;
 
 public class EquazLineare {
+  private static final Logger                   s_log       = LogManager.getLogger(EquazLineare.class);
 
   @SuppressWarnings("unused") private PlotBordo m_bo;
   private Punto                                 m_p1;
@@ -41,6 +45,7 @@ public class EquazLineare {
   }
 
   public static void setTolleranza(double p_v) {
+    s_log.info("Imposto tolleranza click bordo su:{}", String.format("%.2f", p_v));
     sTolleranza = p_v;
   }
 
@@ -137,9 +142,9 @@ public class EquazLineare {
     double k1 = (ly - m_p1.getPy()) * (m_p2.getPx() - m_p1.getPx());
     double k2 = (m_p2.getPy() - m_p1.getPy()) * (lx - m_p1.getPx());
     double diff = Math.abs(k1 - k2);
-    
+
     // if ( diff < 10. ) 
-      System.out.printf("equaz diff %.2f\n", diff);
+    System.out.printf("equaz diff %.2f\n", diff);
 
     return diff < sTolleranza;
   }

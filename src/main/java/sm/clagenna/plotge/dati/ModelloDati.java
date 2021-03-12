@@ -160,7 +160,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
           .create();
 
       jso.toJson(this, fwri);
-      PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.leggiFile);
+      PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.scriviFile, p_fi);
       String sz = String.format("Scritto file \"%s\"", p_fi.getAbsoluteFile());
       ModelloDati.s_log.info(sz);
     } catch (Exception l_e) {
@@ -172,6 +172,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   public void leggiFile(File p_fi) {
     try (JsonReader frea = new JsonReader(new FileReader(p_fi))) {
       setFileDati(p_fi);
+      MenuFiles.getInst().add(p_fi);
       Gson jso = new GsonBuilder() //
           // .excludeFieldsWithoutExposeAnnotation() //
           .setPrettyPrinting() //
@@ -179,7 +180,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
       ModelloDati data = jso.fromJson(frea, ModelloDati.class);
       leggiDa(data);
-      PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.leggiFile);
+      PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.leggiFile, p_fi);
     } catch (Exception l_e) {
       String sz = String.format("Errore %s legendo \"%s\"", l_e.getMessage(), p_fi.getAbsoluteFile());
       ModelloDati.s_log.error(sz, l_e);
@@ -225,6 +226,12 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
     ModelloDati.s_log.debug("Evento {} su {}", p_evt.getPropertyName(), p_evt.getSource().getClass().getSimpleName());
+  }
+
+  public void recalcEquazLineare(PlotVertice p_ve) {
+    for (PlotBordo pbo : getPlotBordi()) {
+       pbo.ricalcolaEquazLineare(p_ve);
+    }
   }
 
 }

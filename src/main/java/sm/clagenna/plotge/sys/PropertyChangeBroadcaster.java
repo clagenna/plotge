@@ -56,6 +56,11 @@ public class PropertyChangeBroadcaster {
     return m_bBroadcastPropEventChange;
   }
 
+  /**
+   * 
+   * @param p_cls La classe del oggetto che sta emettendo il broadcast
+   * @param p_prop quale tipo di broadcast si sta emettendo
+   */
   public void broadCast(Object p_cls, EPropChange p_prop) {
     broadCast(p_cls, p_prop, null);
   }
