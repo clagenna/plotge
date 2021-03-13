@@ -61,8 +61,10 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   }
 
   private void initialize() {
-    m_dati = new ModelloDati();
+    // rinnovo completamente il Model
+    m_dati = MainJFrame.getInstance().nuovoModelloDati();
     m_broadc = PropertyChangeBroadcaster.getInst();
+    m_broadc.addPropertyChangeListener(this);
     m_trasp = new TrasponiFinestra(getSize());
 
     addComponentListener(new ComponentAdapter() {
@@ -145,8 +147,8 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
 
       case SingClickDestro:
         m_primoCerchio = m_dati.checkBersaglioVertice(pu);
-        if (m_primoCerchio != null)
-          System.out.println("Clck3:" + m_primoCerchio.toString());
+        //        if (m_primoCerchio != null)
+        //          System.out.println("Clck3:" + m_primoCerchio.toString());
         break;
       case DoppClickDestro:
         if (m_selVert != null)
@@ -168,11 +170,12 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     if (m_selBordo != null) {
       m_selBordo.setSelected(true);
       bRepaint = true;
+      bcst.broadCast(this, EPropChange.selectBordo, m_selBordo);
     }
     if (m_selVert != null) {
       m_selVert.setSelected(true);
       bRepaint = true;
-      bcst.broadCast(m_selVert, EPropChange.selectVertice);
+      bcst.broadCast(this, EPropChange.selectVertice, m_selVert);
     }
     if (bRepaint)
       repaint();
@@ -287,7 +290,8 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     if (retFi == null)
       return;
     m_broadc.removePropertyChangeListener(m_dati);
-    m_dati = new ModelloDati();
+    // rinnovo completamente il Model
+    m_dati = MainJFrame.getInstance().nuovoModelloDati();
     m_dati.leggiFile(retFi);
     repaint();
 
@@ -335,7 +339,21 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
 
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
-    // TODO Auto-generated method stub
+    Object obj = p_evt.getOldValue();
+    // Object lv = p_evt.getNewValue();
+    if ( ! (obj instanceof EPropChange))
+      return;
+    EPropChange pch = (EPropChange) obj;
+
+    switch (pch) {
+      case valNomeVertChanged:
+      case valPesoChanged:
+        s_log.debug("Evento {} su {}", pch.toString(), p_evt.getSource().getClass().getSimpleName());
+        repaint();
+        break;
+      default:
+        break;
+    }
 
   }
 

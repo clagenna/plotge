@@ -6,6 +6,8 @@ public enum EPropChange {
   selectVertice, //
   selectBordo, //
   panelRezized, //
+  valPesoChanged, //
+  valNomeVertChanged, //
   altro;
 
 }

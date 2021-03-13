@@ -62,6 +62,13 @@ public class Bordo implements Comparable<Bordo> {
     shortNo = p_v;
   }
 
+  public void assestaNomeVertice(String p_oldId, String p_newId) {
+    if ( idVerticeDa.equals(p_oldId))
+      idVerticeDa = p_newId;
+    if ( idVerticeA.equals(p_oldId))
+      idVerticeA = p_newId;
+  }
+
   @Override
   public int compareTo(Bordo p_o) {
     Vertice lvDa = null;

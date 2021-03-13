@@ -159,6 +159,10 @@ public class PlotBordo {
       recalculate();
   }
 
+  public void assestaNomeVertice(String o_oldId, String p_newId) {
+    m_bordo.assestaNomeVertice(o_oldId, p_newId);
+  }
+
   public Bordo getBordo() {
     return m_bordo;
   }

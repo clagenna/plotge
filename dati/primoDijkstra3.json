@@ -102,10 +102,10 @@
     {
       "id": "10",
       "punto": {
-        "px": 37.0,
-        "py": 34.0,
-        "x": 0,
-        "y": 0
+        "px": 36.15596330275228,
+        "py": 33.458715596330265,
+        "x": 563,
+        "y": 180
       },
       "start": false,
       "end": false
@@ -122,12 +122,12 @@
       "end": true
     },
     {
-      "id": "12",
+      "id": "dodici",
       "punto": {
-        "px": 19.715596330275226,
-        "py": 37.24770642201834,
-        "x": 307,
-        "y": 121
+        "px": 15.091743119266052,
+        "py": 40.073394495412835,
+        "x": 235,
+        "y": 77
       },
       "start": false,
       "end": false
@@ -135,10 +135,10 @@
     {
       "id": "13",
       "punto": {
-        "px": 27.999999999999993,
-        "py": 40.97247706422017,
-        "x": 436,
-        "y": 63
+        "px": 31.36792452830188,
+        "py": 43.518867924528294,
+        "x": 475,
+        "y": 42
       },
       "start": false,
       "end": false
@@ -248,14 +248,14 @@
     },
     {
       "idVerticeDa": "7",
-      "idVerticeA": "12",
+      "idVerticeA": "dodici",
       "peso": 61,
       "shortNo": 0
     },
     {
-      "idVerticeDa": "12",
+      "idVerticeDa": "dodici",
       "idVerticeA": "10",
-      "peso": 1,
+      "peso": 77,
       "shortNo": 0
     },
     {
@@ -271,19 +271,19 @@
       "shortNo": 0
     },
     {
-      "idVerticeDa": "12",
+      "idVerticeDa": "dodici",
       "idVerticeA": "13",
-      "peso": 1,
+      "peso": 13,
       "shortNo": 0
     },
     {
       "idVerticeDa": "13",
       "idVerticeA": "10",
-      "peso": 1,
+      "peso": 55,
       "shortNo": 0
     },
     {
-      "idVerticeDa": "12",
+      "idVerticeDa": "dodici",
       "idVerticeA": "14",
       "peso": 1,
       "shortNo": 0

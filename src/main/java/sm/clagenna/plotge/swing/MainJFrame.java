@@ -21,13 +21,13 @@ import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 public abstract class MainJFrame extends JFrame {
 
   /** serialVersionUID long */
-  private static final long     serialVersionUID = -1306277146009904565L;
-  private static Logger         s_log;
-  private static MainJFrame     s_inst;
-  @Getter AppProperties prop;
-  @Getter private ModelloDati   dati;
-  private Dimension             m_winDim;
-  private Point                 m_winPos;
+  private static final long   serialVersionUID = -1306277146009904565L;
+  private static Logger       s_log;
+  private static MainJFrame   s_inst;
+  @Getter AppProperties       prop;
+  @Getter private ModelloDati dati;
+  private Dimension           m_winDim;
+  private Point               m_winPos;
 
   public MainJFrame(String p_tit) {
     super(p_tit);
@@ -126,5 +126,10 @@ public abstract class MainJFrame extends JFrame {
   }
 
   protected abstract void creaComponents();
+
+  public ModelloDati nuovoModelloDati() {
+    dati = new ModelloDati();
+    return dati;
+  }
 
 }

@@ -202,6 +202,8 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
     for (Bordo bo : p_data.liBordi) {
       Vertice vDa = m_mapVerts.get(bo.getIdVerticeDa());
       Vertice vA = m_mapVerts.get(bo.getIdVerticeA());
+      if (vDa == null || vA == null)
+        System.out.println("ModelloDati.leggiDa() ... manca un vertice !!");
       Bordo b2 = new Bordo(vDa, vA, bo.getPeso());
       b2.setShortNo(bo.getShortNo());
       vDa.addBordo(b2);
@@ -230,8 +232,16 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
   public void recalcEquazLineare(PlotVertice p_ve) {
     for (PlotBordo pbo : getPlotBordi()) {
-       pbo.ricalcolaEquazLineare(p_ve);
+      pbo.ricalcolaEquazLineare(p_ve);
     }
+  }
+
+  public void cambiaNomeVertice(Vertice p_ver, String p_newlab) {
+    Vertice ver = findVertice(p_ver.getId());
+    String szOldId = ver.getId();
+    ver.setId(p_newlab);
+    for (PlotBordo pbo : getPlotBordi())
+      pbo.assestaNomeVertice(szOldId, p_newlab);
   }
 
 }
