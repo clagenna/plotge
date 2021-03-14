@@ -1,6 +1,7 @@
 package sm.clagenna.plotge.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -13,11 +14,17 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,6 +59,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
   private PropertyChangeBroadcaster m_bcst;
   private MenuFiles                 m_filesMenu;
   private JMenu                     m_mnUltimiFiles;
+  private JPanel                    m_statusBar;
+  private JLabel                    m_lbStatus;
 
   public SwingApp(String p_tit) {
     super(p_tit);
@@ -83,6 +92,14 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
     m_panRight = new PanelBase();
     m_panRight.setPreferredSize(new Dimension(400, 300));
     m_splitPane.setRightComponent(m_panRight);
+
+    m_statusBar = new JPanel();
+    getContentPane().add(m_statusBar, BorderLayout.SOUTH);
+    m_statusBar.setBorder(new CompoundBorder(new LineBorder(Color.DARK_GRAY), new EmptyBorder(4, 4, 4, 4)));
+
+    m_lbStatus = new JLabel("Last Status");
+    m_lbStatus.setHorizontalAlignment(SwingConstants.LEFT);
+    m_statusBar.add(m_lbStatus);
 
     m_menuBar = new JMenuBar();
     setJMenuBar(m_menuBar);
@@ -253,6 +270,11 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
         szTit = String.format("Shortest Path file: %s", szNam);
         setTitle(szTit);
         m_filesMenu.creaElenco(this, m_mnUltimiFiles);
+        break;
+
+      case notificaStatus:
+        szTit = (String) p_evt.getNewValue();
+        m_lbStatus.setText(szTit);
         break;
 
       default:

@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import sm.clagenna.plotge.enumerati.EPropChange;
+import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 
 public class MioDijkstra {
 
@@ -45,7 +47,7 @@ public class MioDijkstra {
     stampaNodi();
     String szFreccia = "";
     Vertice finale = p_veUltimo;
-    System.out.printf("--------Piu corto da %s verso %s-----------\n", p_vePrimo.getId(), finale.getId());
+    String szLog = String.format("Piu corto da %s verso %s \t", p_vePrimo.getId(), finale.getId());
     Vertice corrente = finale;
     int totale = 0;
     while (finale != null) {
@@ -58,7 +60,8 @@ public class MioDijkstra {
       }
       szFreccia = "->";
     }
-    System.out.printf(" = peso = %s\n", totale);
+    szLog += String.format("  peso Totale = %s", totale);
+    PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.notificaStatus, szLog);
   }
 
   /**
