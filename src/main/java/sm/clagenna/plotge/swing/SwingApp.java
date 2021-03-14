@@ -19,8 +19,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import sm.clagenna.plotge.dati.MenuFiles;
+import sm.clagenna.plotge.dati.MioDijkstra;
 import sm.clagenna.plotge.dati.ModelloDati;
+import sm.clagenna.plotge.dati.Vertice;
 import sm.clagenna.plotge.enumerati.EPropChange;
 import sm.clagenna.plotge.interf.IGestFile;
 import sm.clagenna.plotge.sys.AppProperties;
@@ -30,6 +35,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
 
   /** serialVersionUID long */
   private static final long         serialVersionUID = -3372037517230384176L;
+  private static final Logger       s_log            = LogManager.getLogger(SwingApp.class);
+
   private JSplitPane                m_splitPane;
   private JSplitPane                m_splitParams;
   private PanParmGeneral            m_panVertici;
@@ -204,7 +211,21 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
   }
 
   protected void mnuShortestPathClick() {
-    System.out.println("SwingApp.mnuShortestPathClick()");
+    try {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      ModelloDati dati = MainJFrame.getInstance().getDati();
+      dati.resetShortestPath();
+      Vertice primo = dati.getStartVert();
+      Vertice finale = dati.getEndVert();
+      MioDijkstra dij = new MioDijkstra();
+      dij.analizzaTutti(primo, finale);
+      s_log.debug("MainFrame.mnuShortestPathClick():{}", dij.getNodoFine());
+      m_panRight.repaint();
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
 
   }
 

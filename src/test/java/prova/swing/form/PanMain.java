@@ -10,10 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 
-import sm.clagenna.plotge.dati.Bordo;
 import sm.clagenna.plotge.swing.PanParmGeneral;
-import sm.clagenna.plotge.swing.PlotBordo;
-import sm.clagenna.plotge.swing.PlotVertice;
 
 public class PanMain extends JPanel {
 
@@ -42,7 +39,7 @@ public class PanMain extends JPanel {
 
     JPanel m_panDestro = new JPanel();
     splitPane.setRightComponent(m_panDestro);
-    
+
     ButtonGroup buGroup = new ButtonGroup();
 
     JRadioButton radbuttVertice = new JRadioButton("Vertice");

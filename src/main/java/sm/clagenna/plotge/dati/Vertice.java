@@ -89,4 +89,18 @@ public class Vertice implements Comparable<Vertice> {
     return sz;
   }
 
+  /**
+   * Cerca il bordo che ha come destinazione p_veA Imposta il bordo come
+   * "analizzato" e lo marchia
+   *
+   * @param p_ve
+   *          il vertice di destinazione
+   * @return
+   */
+  public int marchiaBordo(Vertice p_veA) {
+    Bordo bo = bordi.get(p_veA);
+    bo.setShortNo(1);
+    return bo.getPeso();
+  }
+
 }

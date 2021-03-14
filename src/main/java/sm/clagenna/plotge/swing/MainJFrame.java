@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.beans.Beans;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -31,7 +32,7 @@ public abstract class MainJFrame extends JFrame {
 
   public MainJFrame(String p_tit) {
     super(p_tit);
-    if (s_inst != null)
+    if (s_inst != null && !Beans.isDesignTime())
       throw new UnsupportedOperationException(s_inst.getClass().getSimpleName() + " gia istanziata!");
     s_inst = this;
     initialize();

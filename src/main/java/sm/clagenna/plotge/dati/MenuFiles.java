@@ -2,6 +2,7 @@ package sm.clagenna.plotge.dati;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.Beans;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class MenuFiles {
   private List<File>       m_queue;
 
   public MenuFiles() {
-    if (s_inst != null)
+    if (s_inst != null && ! Beans.isDesignTime())
       throw new UnsupportedOperationException("MenuFile è un Singleton !!");
     s_inst = this;
     m_queue = new ArrayList<>();

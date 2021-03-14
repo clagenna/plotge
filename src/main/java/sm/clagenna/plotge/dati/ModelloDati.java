@@ -42,7 +42,6 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   @SuppressWarnings("unused") transient private Vertice m_veLastAdded;
   /** viene serializzata con GSon */
   private List<Bordo>                                   liBordi;
-
   private transient List<PlotVertice>                   m_liPVert;
   private transient List<PlotBordo>                     m_liPBord;
   @Getter
@@ -210,6 +209,16 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
       addPlotBordo(new PlotBordo(b2));
     }
     controllaCiechi();
+  }
+
+  /**
+   * azzera il marchi di shortest path sui bordi
+   */
+  public void resetShortestPath() {
+    if (liBordi == null)
+      return;
+    for (Bordo bo : liBordi)
+      bo.setShortNo(0);
   }
 
   /**

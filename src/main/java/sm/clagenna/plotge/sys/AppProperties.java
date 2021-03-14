@@ -1,5 +1,6 @@
 package sm.clagenna.plotge.sys;
 
+import java.beans.Beans;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,7 +26,7 @@ public class AppProperties {
   public static final String         CSZ_PROP_POSFRAME_X = "frame.posx";
   public static final String         CSZ_PROP_POSFRAME_Y = "frame.posy";
   public static final String         CSZ_PROP_MENUFILE   = "menu.%d";
-  public static final String         CSZ_PROP_BO_TOLLER  = "bordo.tolleranza";  
+  public static final String         CSZ_PROP_BO_TOLLER  = "bordo.tolleranza";
 
   private static AppProperties       s_inst;
 
@@ -35,7 +36,7 @@ public class AppProperties {
   @Setter private File               propertyFile;
 
   public AppProperties() {
-    if (s_inst != null)
+    if (s_inst != null && !Beans.isDesignTime())
       throw new UnsupportedOperationException("AppProperties gia' istanziato");
     s_inst = this;
   }

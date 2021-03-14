@@ -1,5 +1,6 @@
 package sm.clagenna.plotge.sys;
 
+import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class PropertyChangeBroadcaster {
   private boolean                          m_bBroadcastPropEventChange;
 
   public PropertyChangeBroadcaster() {
-    if (s_inst != null)
+    if (s_inst != null && !Beans.isDesignTime())
       throw new UnsupportedOperationException("PropertyChangeBroadcaster gia istanziato");
     s_inst = this;
   }
@@ -57,9 +58,11 @@ public class PropertyChangeBroadcaster {
   }
 
   /**
-   * 
-   * @param p_cls La classe del oggetto che sta emettendo il broadcast
-   * @param p_prop quale tipo di broadcast si sta emettendo
+   *
+   * @param p_cls
+   *          La classe del oggetto che sta emettendo il broadcast
+   * @param p_prop
+   *          quale tipo di broadcast si sta emettendo
    */
   public void broadCast(Object p_cls, EPropChange p_prop) {
     broadCast(p_cls, p_prop, null);
