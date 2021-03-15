@@ -49,6 +49,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
   @Getter
   @Setter transient private double                      zoom;
+  private TrasponiFinestra                              m_trasp;
 
   public ModelloDati() {
     initialize();
@@ -117,6 +118,12 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
     if (m_mapVerts != null && m_mapVerts.containsKey(p_id))
       ve = m_mapVerts.get(p_id);
     return ve;
+  }
+
+  public TrasponiFinestra getTraspondiFinestra() {
+    if (m_trasp == null)
+      m_trasp = new TrasponiFinestra(this);
+    return m_trasp;
   }
 
   public PlotVertice checkBersaglioVertice(Punto p_pu) {

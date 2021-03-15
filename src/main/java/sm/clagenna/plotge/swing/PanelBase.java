@@ -40,7 +40,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   private static final Logger       s_log            = LogManager.getLogger(PanelBase.class);
 
   private ModelloDati               m_dati;
-  private TrasponiFinestra          m_trasp;
+  // private TrasponiFinestra          m_trasp;
   private PropertyChangeBroadcaster m_broadc;
   /** vertice selezionato sul grafo */
   private PlotVertice               m_selVert;
@@ -51,6 +51,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   private PlotVertice               m_primoCerchio;
   private PlotVertice               m_secondoCerchio;
   private Punto                     m_secondoPunto;
+  // private Punto                     m_maxp;
 
   public PanelBase() {
     initialize();
@@ -65,7 +66,9 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     m_dati = MainJFrame.getInstance().nuovoModelloDati();
     m_broadc = PropertyChangeBroadcaster.getInst();
     m_broadc.addPropertyChangeListener(this);
-    m_trasp = new TrasponiFinestra(getSize());
+    // m_trasp = new TrasponiFinestra(getSize());
+    TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
+    trasp.resetGeometry(m_dati);
 
     addComponentListener(new ComponentAdapter() {
       @Override
@@ -114,7 +117,8 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     m_primoCerchio = null;
     m_secondoCerchio = null;
     // ------------------------
-    Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
+    TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
+    Punto pu = trasp.convertiX(new Punto(p_e.getPoint()));
     double lx1 = pu.getX();
     double ly1 = pu.getY();
     PropertyChangeBroadcaster bcst = PropertyChangeBroadcaster.getInst();
@@ -187,7 +191,8 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     // vale il tasto di #locMousePressed
     // m_nTasto = p_e.getButton() * 10 + p_e.getClickCount();
     EMouseGesture eg = EMouseGesture.valueOf(m_nTasto);
-    Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
+    TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
+    Punto pu = trasp.convertiX(new Punto(p_e.getPoint()));
 
     switch (eg) {
 
@@ -234,7 +239,8 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     boolean bRepaint = false;
     m_nTasto = p_e.getButton() * 10 + p_e.getClickCount();
     EMouseGesture eg = EMouseGesture.valueOf(m_nTasto);
-    Punto pu = m_trasp.convertiX(new Punto(p_e.getPoint()));
+    TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
+    Punto pu = trasp.convertiX(new Punto(p_e.getPoint()));
     m_secondoPunto = null;
 
     switch (eg) {
@@ -278,7 +284,9 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
       int inc = p_e.getWheelRotation() * 30;
       if (p_e.isShiftDown())
         inc *= 8;
-      m_trasp.incrZoom(inc);
+      TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
+      trasp.incrZoom(inc);
+      setPreferredSize(new Dimension((int) trasp.getMaxX(), (int) trasp.getMaxY()));
       repaint();
     }
   }
@@ -360,30 +368,34 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   @Override
   public void paint(Graphics p_g) {
     //    TimeThis tt = new TimeThis("paint");
-
+    TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
     Graphics2D g2 = (Graphics2D) p_g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    if (m_trasp.isGeometryChanged(this))
-      m_trasp.resetGeometry(this);
+//    if (trasp.isGeometryChanged(this))
+//      trasp.resetGeometry(this);
+    trasp.resetGeometry(m_dati);
 
-    g2.clearRect(0, 0, (int) m_trasp.getWidth(), (int) m_trasp.getHeight());
+    g2.clearRect(0, 0, (int) trasp.getWidth(), (int) trasp.getHeight());
     PlotGriglia pg = new PlotGriglia();
-    pg.disegnaGriglia(g2, m_trasp);
+    pg.disegnaGriglia(g2, trasp);
     disegnaBordi(g2);
     disegnaVertici(g2);
-
+    // imposto la pref.size al massimo toccato dai grafi
+    // System.out.println("PanelBase.setPreferredSize" + m_maxp);
+    setPreferredSize(new Dimension((int) trasp.getMaxX(), (int) trasp.getMaxY()));
     //    tt.stop(true);
   }
 
   private void disegnaBordi(Graphics2D p_g2) {
+    TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
     for (PlotBordo bo : m_dati.getPlotBordi())
-      bo.paintComponent(p_g2, m_trasp);
+      bo.paintComponent(p_g2, trasp);
     //    System.out.printf("disb: primo(%s) \tsecon(%s)\n", //
     //        (m_primoCerchio == null ? "*NULL*" : m_primoCerchio.getPunto().toString()), //
     //        (m_secondoPunto == null ? "*NULL*" : m_secondoPunto.toString()) //
     //    );
     if (m_primoCerchio != null && m_secondoPunto != null) {
-      Punto p1 = m_trasp.convertiW(m_primoCerchio.getPunto());
+      Punto p1 = trasp.convertiW(m_primoCerchio.getPunto());
       Punto p2 = m_secondoPunto;
       p_g2.drawLine(p1.getWx(), p1.getWy(), p2.getWx(), p2.getWy());
       //      System.out.printf("paint line (%d, %d) - (%d, %d)\n", //
@@ -392,8 +404,9 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   }
 
   private void disegnaVertici(Graphics2D p_g2) {
+    TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
     for (PlotVertice pve : m_dati.getPlotVertici())
-      pve.paintComponent(p_g2, m_trasp);
+      pve.paintComponent(p_g2, trasp);
   }
 
 }

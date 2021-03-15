@@ -19,8 +19,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -91,7 +93,11 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
 
     m_panRight = new PanelBase();
     m_panRight.setPreferredSize(new Dimension(400, 300));
-    m_splitPane.setRightComponent(m_panRight);
+
+    JScrollPane panScroll = new JScrollPane(m_panRight, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+    m_splitPane.setRightComponent(panScroll);
 
     m_statusBar = new JPanel();
     getContentPane().add(m_statusBar, BorderLayout.SOUTH);

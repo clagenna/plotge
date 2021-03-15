@@ -43,8 +43,8 @@ public class PanProva extends JPanel {
   }
 
   public void inizializza() {
-    m_trasp = new TrasponiFinestra(this);
     m_dati = new ModelloDati();
+    m_trasp = new TrasponiFinestra(m_dati);
 
     addMouseListener(new MouseAdapter() {
       @Override
@@ -160,9 +160,9 @@ public class PanProva extends JPanel {
 
     Graphics2D g2 = (Graphics2D) p_g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    if (m_trasp.isGeometryChanged(this))
-      m_trasp.resetGeometry(this);
-
+  //    if (m_trasp.isGeometryChanged(this))
+    m_trasp.resetGeometry(m_dati);
+    
     g2.clearRect(0, 0, (int) m_trasp.getWidth(), (int) m_trasp.getHeight());
     PlotGriglia pg = new PlotGriglia();
     pg.disegnaGriglia(g2, m_trasp);

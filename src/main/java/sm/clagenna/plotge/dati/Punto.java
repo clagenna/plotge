@@ -61,6 +61,18 @@ public class Punto extends Point implements Cloneable {
     y = p_wy;
   }
 
+  /**
+   * Imposta il punto W massimi raggiunti dal p_maxp
+   *
+   * @param p
+   */
+  public void setMaxPunto(Punto p) {
+    if (getWx() < p.getWx())
+      setWx(p.getWx());
+    if (getWy() < p.getWy())
+      setWy(p.getWy());
+  }
+
   public Punto trasponi(TrasponiFinestra p_t) {
     Punto p = p_t.convertiX(this);
     setPx(p.px);

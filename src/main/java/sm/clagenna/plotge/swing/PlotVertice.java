@@ -40,6 +40,8 @@ public class PlotVertice {
   private transient Color                   m_colore;
   @Getter
   @Setter private transient boolean         selected;
+  /** il punto più lontano raggiunto da questo vertice */
+  @Getter private Punto                     maxp;
 
   public PlotVertice() {
     m_colore = s_Vert;
@@ -59,9 +61,11 @@ public class PlotVertice {
     Punto pVert = p_trasp.convertiW(m_vert.getPunto());
     int px = pVert.getWx();
     int py = pVert.getWy();
+    maxp = new Punto(px + ragW, py + ragW);
     Color bkg = g2.getBackground();
     if (m_vert.isStart() || m_vert.isEnd()) {
       int ragWSE = ragW + 5;
+      maxp = new Punto(px + ragWSE, py + ragWSE);
       Shape lcerchio = new Ellipse2D.Double(px - ragWSE, py - ragWSE, ragWSE * 2.0, ragWSE * 2.0);
       g2.setColor(bkg);
       g2.fill(lcerchio);
