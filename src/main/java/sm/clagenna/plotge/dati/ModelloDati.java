@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,34 +31,47 @@ import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 public class ModelloDati implements Serializable, PropertyChangeListener {
 
   /** serialVersionUID long */
-  private static final long                             serialVersionUID = -3983127751832007743L;
-  private static final Logger                           s_log            = LogManager.getLogger(ModelloDati.class);
+  private static final long                 serialVersionUID = -3983127751832007743L;
+  private static final Logger               s_log            = LogManager.getLogger(ModelloDati.class);
 
   /** viene serializzata con GSon */
-  private List<Vertice>                                 liVertici;
-  private transient Map<String, Vertice>                m_mapVerts;
+  @Getter
+  @Setter private transient boolean         modificato;
+  @Getter
+  @Setter private transient boolean         serializing;
+  private List<Vertice>                     liVertici;
+  private transient Map<String, Vertice>    m_mapVerts;
 
   @Getter
-  @Setter private transient Vertice                     startVert;
-  @Getter private transient Vertice                     endVert;
-  @SuppressWarnings("unused") transient private Vertice m_veLastAdded;
+  @Setter private transient Vertice         startVert;
+  @Getter private transient Vertice         endVert;
+
   /** viene serializzata con GSon */
-  private List<Bordo>                                   liBordi;
-  private transient List<PlotVertice>                   m_liPVert;
-  private transient List<PlotBordo>                     m_liPBord;
+  private List<Bordo>                       liBordi;
+  private transient List<PlotVertice>       m_liPVert;
+  private transient List<PlotBordo>         m_liPBord;
   @Getter
-  @Setter private transient File                        fileDati;
+  @Setter private transient File            fileDati;
 
   @Getter
-  @Setter transient private double                      zoom;
-  private TrasponiFinestra                              m_trasp;
+  @Setter transient private double          zoom;
+  private TrasponiFinestra                  m_trasp;
 
   public ModelloDati() {
     initialize();
   }
 
-  private void initialize() {
+  public void dispose() {
+    PropertyChangeBroadcaster broadc = PropertyChangeBroadcaster.getInst();
+    broadc.removePropertyChangeListener(this);
+    broadc.removePropertyChangeListener(TrasponiFinestra.class);
+  }
 
+  private void initialize() {
+    setModificato(false);
+    PropertyChangeBroadcaster broadc = PropertyChangeBroadcaster.getInst();
+    broadc.removePropertyChangeListener(getClass());
+    broadc.addPropertyChangeListener(this);
   }
 
   public void addVertice(Vertice p_v) {
@@ -70,7 +86,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
       liVertici.add(p_v);
     if (startVert == null)
       startVert = p_v;
-    m_veLastAdded = p_v;
+
   }
 
   public void addBordo(Bordo p_v) {
@@ -156,12 +172,10 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
       m_liPBord = new ArrayList<>();
     return m_liPBord;
   }
-  
-  public void setEndVert( PlotVertice p_ve) {
-    if ( endVert != null)
-      endVert.setEnd(false);
-    endVert = p_ve.getVertice();
-    endVert.setEnd(true);
+
+  public void setEndVert(Vertice p_ve) {
+    if (p_ve.isEnd())
+      endVert = p_ve;
   }
 
   public void salvaFile(File p_fi) {
@@ -183,6 +197,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
   public void leggiFile(File p_fi) {
     try (JsonReader frea = new JsonReader(new FileReader(p_fi))) {
+      setSerializing(true);
       setFileDati(p_fi);
       MenuFiles.getInst().add(p_fi);
       Gson jso = new GsonBuilder() //
@@ -192,10 +207,19 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
       ModelloDati data = jso.fromJson(frea, ModelloDati.class);
       leggiDa(data);
-      PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.leggiFile, p_fi);
+      data.dispose();
+      PropertyChangeBroadcaster broadc = PropertyChangeBroadcaster.getInst();
+      // rimuovo il vecchio modello dati (per fromJSon)
+      broadc.removePropertyChangeListener(getClass());
+      // e aggiungo questo
+      broadc.addPropertyChangeListener(this);
+      broadc.broadCast(p_fi, EPropChange.leggiFile, p_fi);
     } catch (Exception l_e) {
       String sz = String.format("Errore %s legendo \"%s\"", l_e.getMessage(), p_fi.getAbsoluteFile());
       ModelloDati.s_log.error(sz, l_e);
+    } finally {
+      setModificato(false);
+      setSerializing(false);
     }
   }
 
@@ -225,6 +249,25 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   }
 
   /**
+   * Spara una JOptionPane per la conferma del abbandono delle modifiche
+   *
+   * @return
+   */
+  public boolean canIDispose(JComponent p_co) {
+    boolean bRet = true;
+    if (isModificato()) {
+      PropertyChangeBroadcaster broadc = PropertyChangeBroadcaster.getInst();
+      int ret = JOptionPane.showConfirmDialog(p_co, "Sei sicuro di voler scartare le modifiche ?",
+          "Confermare l'abbandono delle modifiche", JOptionPane.YES_NO_OPTION);
+      if (ret == JOptionPane.NO_OPTION || ret == JOptionPane.CANCEL_OPTION) {
+        bRet = false;
+        broadc.broadCast(this, EPropChange.notificaStatus, "Azione cancellata !");
+      }
+    }
+    return bRet;
+  }
+
+  /**
    * azzera il marchi di shortest path sui bordi
    */
   public void resetShortestPath() {
@@ -249,7 +292,28 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
-    ModelloDati.s_log.debug("Evento {} su {}", p_evt.getPropertyName(), p_evt.getSource().getClass().getSimpleName());
+    Object obj = p_evt.getOldValue();
+    @SuppressWarnings("unused")
+    Object lv = p_evt.getNewValue();
+    if ( ! (obj instanceof EPropChange))
+      return;
+    EPropChange pch = (EPropChange) obj;
+    switch (pch) {
+      case valNomeVertChanged:
+      case valPesoChanged:
+        setModificato(true);
+        break;
+
+      case modificaGeomtria:
+        if (isSerializing())
+          break;
+        // qualcosa è cambiato !
+        setModificato(true);
+        break;
+      default:
+        break;
+
+    }
   }
 
   public void recalcEquazLineare(PlotVertice p_ve) {
@@ -264,6 +328,32 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
     ver.setId(p_newlab);
     for (PlotBordo pbo : getPlotBordi())
       pbo.assestaNomeVertice(szOldId, p_newlab);
+  }
+
+  public void cancellaVertice(Vertice p_ver) {
+    String szVerId = p_ver.getId();
+    List<PlotBordo> liCanc = new ArrayList<>();
+    // cancello i bordi che toccano questo vertice
+    for (PlotBordo bo : getPlotBordi()) {
+      if (bo.isPertinente(p_ver))
+        liCanc.add(bo);
+    }
+    for (PlotBordo bo : liCanc) {
+      cancellaBordo(bo);
+    }
+    // --------------------------------------------
+    liVertici.remove(p_ver);
+    m_mapVerts.remove(szVerId);
+    m_liPVert.removeIf(s -> s.getId().equals(szVerId));
+    if (startVert != null && startVert.equals(p_ver))
+      startVert = null;
+    if (endVert != null && endVert.equals(p_ver))
+      endVert = null;
+  }
+
+  public void cancellaBordo(PlotBordo p_bo) {
+    liBordi.remove(p_bo.getBordo());
+    m_liPBord.remove(p_bo);
   }
 
 }

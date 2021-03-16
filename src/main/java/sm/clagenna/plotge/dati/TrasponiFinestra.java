@@ -56,7 +56,9 @@ public class TrasponiFinestra implements PropertyChangeListener {
   }
 
   private void inizializza() {
-    PropertyChangeBroadcaster.getInst().addPropertyChangeListener(this);
+    PropertyChangeBroadcaster broadc = PropertyChangeBroadcaster.getInst();
+    broadc.removePropertyChangeListener(getClass());
+    broadc.addPropertyChangeListener(this);
   }
 
   public void setRect(Dimension p_size) {

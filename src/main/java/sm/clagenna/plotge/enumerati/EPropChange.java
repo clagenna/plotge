@@ -8,7 +8,9 @@ public enum EPropChange {
   panelRezized, //
   valPesoChanged, //
   valNomeVertChanged, //
+  modificaGeomtria, //
   notificaStatus, //
-  altro;
+  ridisegna,
+  altro; //
 
 }

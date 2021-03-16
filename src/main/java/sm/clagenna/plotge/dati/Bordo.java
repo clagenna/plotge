@@ -4,18 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Bordo implements Comparable<Bordo> {
-  @Getter private transient Vertice          verticeDa;
-  @Getter private transient Vertice          verticeA;
+  @Getter private transient Vertice verticeDa;
+  @Getter private transient Vertice verticeA;
 
   /** questi 2 campi servono *solo* per la serializzazione con GSon */
-  private String idVerticeDa;
-  private String idVerticeA;
+  private String                    idVerticeDa;
+  private String                    idVerticeA;
 
   @Getter
-  @Setter private int                        peso;
+  @Setter private int               peso;
 
   /** se rappresenta la via breve e quale */
-  private int                                shortNo;
+  private int                       shortNo;
 
   public Bordo() {
     //
@@ -63,9 +63,9 @@ public class Bordo implements Comparable<Bordo> {
   }
 
   public void assestaNomeVertice(String p_oldId, String p_newId) {
-    if ( idVerticeDa.equals(p_oldId))
+    if (idVerticeDa.equals(p_oldId))
       idVerticeDa = p_newId;
-    if ( idVerticeA.equals(p_oldId))
+    if (idVerticeA.equals(p_oldId))
       idVerticeA = p_newId;
   }
 
@@ -114,4 +114,14 @@ public class Bordo implements Comparable<Bordo> {
     return sz;
   }
 
+  public boolean isPertinente(Vertice p_ve) {
+    boolean bRet = false;
+    if (p_ve == null)
+      return bRet;
+    if (verticeDa != null)
+      bRet = verticeDa.equals(p_ve);
+    if ( !bRet && verticeA != null)
+      bRet = verticeA.equals(p_ve);
+    return bRet;
+  }
 }

@@ -248,6 +248,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
       case SingClickSinistro:
         if (m_selVert != null) {
           m_selVert.setPunto(pu);
+          m_broadc.broadCast(this, EPropChange.modificaGeomtria);
           m_dati.recalcEquazLineare(m_selVert);
         }
         break;
@@ -292,17 +293,19 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   }
 
   public void leggiFile(File p_fi) {
+    if ( !m_dati.canIDispose(this)) {
+      return;
+    }
     File retFi = p_fi;
     if (retFi == null)
       retFi = apriFileChooser("Dammi il nome file JSON da leggere", true);
     if (retFi == null)
       return;
-    m_broadc.removePropertyChangeListener(m_dati);
+    m_broadc.removePropertyChangeListener(m_dati.getClass());
     // rinnovo completamente il Model
     m_dati = MainJFrame.getInstance().nuovoModelloDati();
     m_dati.leggiFile(retFi);
     repaint();
-
   }
 
   public void salvaFile(File p_fi) {
@@ -354,6 +357,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     EPropChange pch = (EPropChange) obj;
 
     switch (pch) {
+      case ridisegna:
       case valNomeVertChanged:
       case valPesoChanged:
         s_log.debug("Evento {} su {}", pch.toString(), p_evt.getSource().getClass().getSimpleName());
@@ -371,11 +375,11 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     TrasponiFinestra trasp = m_dati.getTraspondiFinestra();
     Graphics2D g2 = (Graphics2D) p_g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//    if (trasp.isGeometryChanged(this))
-//      trasp.resetGeometry(this);
+    //    if (trasp.isGeometryChanged(this))
+    //      trasp.resetGeometry(this);
     trasp.resetGeometry(m_dati, this);
-
-    g2.clearRect(0, 0, (int) trasp.getWidth(), (int) trasp.getHeight());
+    Dimension dim = getSize();
+    g2.clearRect(0, 0, dim.width, dim.height);
     PlotGriglia pg = new PlotGriglia();
     pg.disegnaGriglia(g2, trasp);
     disegnaBordi(g2);

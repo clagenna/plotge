@@ -187,9 +187,7 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
   }
 
   protected void mnuLeggiClick() {
-
     try {
-      System.out.println("SwingApp.mnuLeggiClick()");
       this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
       m_panRight.leggiFile(null);
     } finally {
@@ -219,6 +217,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
   }
 
   protected void mnuEsciClick() {
+    if ( !getDati().canIDispose(m_panRight))
+      return;
     AppProperties prop = AppProperties.getInst();
     if (prop == null)
       return;

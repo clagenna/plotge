@@ -15,6 +15,8 @@ import lombok.Setter;
 import sm.clagenna.plotge.dati.Punto;
 import sm.clagenna.plotge.dati.TrasponiFinestra;
 import sm.clagenna.plotge.dati.Vertice;
+import sm.clagenna.plotge.enumerati.EPropChange;
+import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 
 /**
  * Classe preposta a disegnare il vertice su di una Frame con il metoto
@@ -123,6 +125,7 @@ public class PlotVertice {
     if (m_vert == null)
       return;
     m_vert.setPunto(p_pu);
+    PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.modificaGeomtria);
   }
 
   public Punto getPunto() {

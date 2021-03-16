@@ -16,6 +16,7 @@ import lombok.Setter;
 import sm.clagenna.plotge.dati.Bordo;
 import sm.clagenna.plotge.dati.Punto;
 import sm.clagenna.plotge.dati.TrasponiFinestra;
+import sm.clagenna.plotge.dati.Vertice;
 
 public class PlotBordo {
 
@@ -178,5 +179,9 @@ public class PlotBordo {
 
   public void recalculate() {
     m_eq = new EquazLineare(this);
+  }
+
+  public boolean isPertinente(Vertice p_ver) {
+    return getBordo().isPertinente(p_ver);
   }
 }

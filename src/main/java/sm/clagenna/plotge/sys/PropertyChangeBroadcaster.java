@@ -49,6 +49,13 @@ public class PropertyChangeBroadcaster {
       m_liBCstPropList = null;
   }
 
+  public void removePropertyChangeListener(Class<?> p_class) {
+    if (m_liBCstPropList == null)
+      return;
+    // for ( PropertyChangeListener p : m_liBCstPropList)
+    m_liBCstPropList.removeIf(p -> p.getClass() == p_class);
+  }
+
   public void setBroadcastPropEventChange(boolean p_bv) {
     m_bBroadcastPropEventChange = p_bv;
   }

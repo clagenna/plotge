@@ -36,6 +36,7 @@ public class Vertice implements Comparable<Vertice> {
     setId(p_id);
   }
 
+  @Deprecated
   public void setPunto(Point p) {
     punto = new Punto(p);
 
@@ -53,6 +54,20 @@ public class Vertice implements Comparable<Vertice> {
     if (isEnd())
       return false;
     return cieco;
+  }
+
+  /**
+   * Cerca il bordo che ha come destinazione p_veA Imposta il bordo come
+   * "analizzato" e lo marchia
+   *
+   * @param p_ve
+   *          il vertice di destinazione
+   * @return
+   */
+  public int marchiaBordo(Vertice p_veA) {
+    Bordo bo = bordi.get(p_veA);
+    bo.setShortNo(1);
+    return bo.getPeso();
   }
 
   @Override
@@ -89,18 +104,13 @@ public class Vertice implements Comparable<Vertice> {
     return sz;
   }
 
-  /**
-   * Cerca il bordo che ha come destinazione p_veA Imposta il bordo come
-   * "analizzato" e lo marchia
-   *
-   * @param p_ve
-   *          il vertice di destinazione
-   * @return
-   */
-  public int marchiaBordo(Vertice p_veA) {
-    Bordo bo = bordi.get(p_veA);
-    bo.setShortNo(1);
-    return bo.getPeso();
+  @Override
+  public boolean equals(Object p_obj) {
+    if (p_obj == null || ! (p_obj instanceof Vertice))
+      return false;
+    Vertice altro = (Vertice) p_obj;
+    if (getId() == null || altro.getId() == null)
+      return false;
+    return getId().equals(altro.getId());
   }
-
 }

@@ -1,6 +1,5 @@
 package prova.json;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -46,15 +45,15 @@ public class ProvaJSon {
     m_dati.addPlotVertice(new PlotVertice(ve1));
 
     Vertice ve2 = new Vertice("due");
-    ve2.setPunto(new Point(7, 2));
+    ve2.setPunto(new Punto(7, 2));
     m_dati.addPlotVertice(new PlotVertice(ve2));
 
     Vertice ve3 = new Vertice("Lungo");
-    ve3.setPunto(new Point(7, 8));
+    ve3.setPunto(new Punto(7, 8));
     m_dati.addPlotVertice(new PlotVertice(ve3));
 
     Vertice ve4 = new Vertice("steso");
-    ve4.setPunto(new Point(15, 2));
+    ve4.setPunto(new Punto(15, 2));
     m_dati.addPlotVertice(new PlotVertice(ve4));
 
     Bordo bo = new Bordo(ve1, ve2, 23);
@@ -98,11 +97,11 @@ public class ProvaJSon {
       System.out.println("---------------  Hash dei files generati    --------------");
       System.out.printf("%s\t%s\n", CSZ_JSONFILE, sha1);
       System.out.printf("%s\t%s\n", CSZ_JSONFILE2, sha2);
-      if ( sha1.equals(sha2))
+      if (sha1.equals(sha2))
         System.out.println("I files sono IDENTICI !!");
       else
         System.out.println("????   Errore nella serializzazione  ?????");
-        
+
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     } catch (IOException e) {

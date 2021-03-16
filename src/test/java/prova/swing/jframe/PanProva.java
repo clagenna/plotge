@@ -3,7 +3,6 @@ package prova.swing.jframe;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -160,9 +159,9 @@ public class PanProva extends JPanel {
 
     Graphics2D g2 = (Graphics2D) p_g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-  //    if (m_trasp.isGeometryChanged(this))
+    //    if (m_trasp.isGeometryChanged(this))
     m_trasp.resetGeometry(m_dati);
-    
+
     g2.clearRect(0, 0, (int) m_trasp.getWidth(), (int) m_trasp.getHeight());
     PlotGriglia pg = new PlotGriglia();
     pg.disegnaGriglia(g2, m_trasp);
@@ -190,15 +189,15 @@ public class PanProva extends JPanel {
     m_dati.addPlotVertice(new PlotVertice(ve1));
 
     Vertice ve2 = new Vertice("due");
-    ve2.setPunto(new Point(7, 2));
+    ve2.setPunto(new Punto(7, 2));
     m_dati.addPlotVertice(new PlotVertice(ve2));
 
     Vertice ve3 = new Vertice("Lungo");
-    ve3.setPunto(new Point(7, 8));
+    ve3.setPunto(new Punto(7, 8));
     m_dati.addPlotVertice(new PlotVertice(ve3));
 
     Vertice ve4 = new Vertice("steso");
-    ve4.setPunto(new Point(15, 2));
+    ve4.setPunto(new Punto(15, 2));
     m_dati.addPlotVertice(new PlotVertice(ve4));
 
     Bordo bo = new Bordo(ve1, ve2, 23);

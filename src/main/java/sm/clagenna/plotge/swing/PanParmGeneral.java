@@ -192,20 +192,59 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
   }
 
-  protected void ckEndPointClick(ItemEvent p_e) {
+  protected void ckStartPointClick(ItemEvent p_e) {
     boolean bSel = p_e.getStateChange() == ItemEvent.SELECTED;
-    ModelloDati dati  = getDati();
-    System.out.println("PanParmGeneral.ckEndPointClick():" + bSel);
-    dati.setEndVert(m_ver);
+    ModelloDati dati = getDati();
+    System.out.println("PanParmGeneral.ckStartPointClick():" + bSel);
+    Vertice ver = m_ver.getVertice();
+    ver.setStart(bSel);
+    dati.setEndVert(ver);
+    PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.ridisegna);
   }
 
-  protected void ckStartPointClick(ItemEvent p_e) {
-    System.out.println("PanParmGeneral.ckStartPointClick()" + p_e.toString());
-
+  protected void ckEndPointClick(ItemEvent p_e) {
+    boolean bSel = p_e.getStateChange() == ItemEvent.SELECTED;
+    ModelloDati dati = getDati();
+    System.out.println("PanParmGeneral.ckEndPointClick():" + bSel);
+    Vertice ver = m_ver.getVertice();
+    ver.setEnd(bSel);
+    dati.setEndVert(ver);
+    PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.ridisegna);
   }
 
   protected void btDelVerticeClick(ActionEvent p_e) {
     System.out.println("PanParmGeneral.btDelVerticeClick()");
+    try {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      ModelloDati dati = getDati();
+      Vertice ver = m_ver.getVertice();
+      String newlab = m_txId.getText();
+      s_log.debug("Cancello il vertice {}", newlab);
+      dati.cancellaVertice(ver);
+      PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.ridisegna);
+    } catch (Exception e) {
+      s_log.error("Err. in del Vertice !", e);
+    } finally {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+  }
+
+  protected void btDelBordoClick(ActionEvent p_e) {
+    String szBordoId = null;
+    System.out.println("PanParmGeneral.btDelVerticeClick()");
+    try {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+      ModelloDati dati = getDati();
+      PlotBordo bor = m_bordo;
+      szBordoId = bor.toString();
+      s_log.debug("Cancello il bordo {}", szBordoId);
+      dati.cancellaBordo(bor);
+      PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.ridisegna);
+    } catch (Exception e) {
+      s_log.error("Err. in del Bordo {}!", szBordoId, e);
+    } finally {
+      this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
   }
 
   protected void btSalvaVerticeClick(ActionEvent p_e) {
@@ -256,12 +295,8 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
   }
 
-  protected void btDelBordoClick(ActionEvent p_e) {
-    System.out.println("PanParmGeneral.btDelBordoClick()");
-  }
-
   private ModelloDati getDati() {
-    return SwingApp.getInstance().getDati();
+    return MainJFrame.getInstance().getDati();
   }
 
   @Override
