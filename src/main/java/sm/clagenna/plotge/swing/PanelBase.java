@@ -373,7 +373,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 //    if (trasp.isGeometryChanged(this))
 //      trasp.resetGeometry(this);
-    trasp.resetGeometry(m_dati);
+    trasp.resetGeometry(m_dati, this);
 
     g2.clearRect(0, 0, (int) trasp.getWidth(), (int) trasp.getHeight());
     PlotGriglia pg = new PlotGriglia();

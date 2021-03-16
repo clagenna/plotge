@@ -7,7 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -140,18 +140,32 @@ public class TrasponiFinestra implements PropertyChangeListener {
     return wi != width || he != height;
   }
 
-  @Deprecated
-  public void resetGeometry(JPanel p_pan) {
-    if (p_pan == null)
-      return;
-    Rectangle rect = p_pan.getBounds();
-    width = (rect.width);
-    height = (rect.height);
-    inizializza();
-  }
-
+  //  @Deprecated
+  //  public void resetGeometry(JPanel p_pan) {
+  //    if (p_pan == null)
+  //      return;
+  //    Rectangle rect = p_pan.getBounds();
+  //    width = (rect.width);
+  //    height = (rect.height);
+  //    inizializza();
+  //  }
+  
   public void resetGeometry(ModelloDati p_dati) {
     m_dati = p_dati;
+    resetGeometry(p_dati.getPlotVertici());
+  }
+
+  public void resetGeometry(ModelloDati p_dati, JComponent p_co) {
+    m_dati = p_dati;
+    List<PlotVertice> li = p_dati.getPlotVertici();
+    if (li == null || li.size() == 0) {
+      if (p_co != null) {
+        Dimension di = p_co.getSize();
+        m_maxX = di.getWidth();
+        m_maxY = di.getHeight();
+      }
+      return;
+    }
     resetGeometry(p_dati.getPlotVertici());
   }
 

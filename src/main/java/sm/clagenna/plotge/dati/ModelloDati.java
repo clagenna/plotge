@@ -37,8 +37,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
 
   @Getter
   @Setter private transient Vertice                     startVert;
-  @Getter
-  @Setter private transient Vertice                     endVert;
+  @Getter private transient Vertice                     endVert;
   @SuppressWarnings("unused") transient private Vertice m_veLastAdded;
   /** viene serializzata con GSon */
   private List<Bordo>                                   liBordi;
@@ -156,6 +155,13 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
     if (m_liPBord == null)
       m_liPBord = new ArrayList<>();
     return m_liPBord;
+  }
+  
+  public void setEndVert( PlotVertice p_ve) {
+    if ( endVert != null)
+      endVert.setEnd(false);
+    endVert = p_ve.getVertice();
+    endVert.setEnd(true);
   }
 
   public void salvaFile(File p_fi) {

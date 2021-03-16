@@ -39,12 +39,14 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
   private PlotVertice               m_ver;
   private PlotBordo                 m_bordo;
   //   @SuppressWarnings("unused") private PlotBordo m_bordo;
+  private JButton                   m_btDelVert;
   private JButton                   m_btSalvaVert;
   private PropertyChangeBroadcaster m_broadc;
   private JLabel                    m_lblBoPeso;
   private JTextField                m_txPeso;
   private JLabel                    m_txShortNo;
   private JLabel                    m_lblShortNo;
+  private JButton                   m_btDelBordo;
   private JButton                   m_btSalvaBordo;
   private JLabel                    m_lblTitoloParm;
 
@@ -68,8 +70,9 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     m_lblTitoloParm.setHorizontalAlignment(SwingConstants.CENTER);
     m_lblTitoloParm.setFont(new Font("Tahoma", Font.PLAIN, 15));
     GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+    gbc_lblNewLabel.gridwidth = 2;
     gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-    gbc_lblNewLabel.gridx = 1;
+    gbc_lblNewLabel.gridx = 0;
     gbc_lblNewLabel.gridy = 0;
     add(m_lblTitoloParm, gbc_lblNewLabel);
 
@@ -118,6 +121,14 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
         btSalvaVerticeClick(e);
       }
     });
+
+    m_btDelVert = new JButton("Del Vert.");
+    GridBagConstraints gbc_btDelVert = new GridBagConstraints();
+    gbc_btDelVert.insets = new Insets(0, 0, 5, 5);
+    gbc_btDelVert.gridx = 0;
+    gbc_btDelVert.gridy = 4;
+    m_btDelVert.addActionListener(e -> btDelVerticeClick(e));
+    add(m_btDelVert, gbc_btDelVert);
     GridBagConstraints gbc_btSalvaVert = new GridBagConstraints();
     gbc_btSalvaVert.insets = new Insets(0, 0, 5, 0);
     gbc_btSalvaVert.gridx = 1;
@@ -165,6 +176,15 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
         btSalvaBordoClick(e);
       }
     });
+
+    m_btDelBordo = new JButton("Del Bordo");
+    GridBagConstraints gbc_btDelBordo = new GridBagConstraints();
+    gbc_btDelBordo.insets = new Insets(0, 0, 0, 5);
+    gbc_btDelBordo.gridx = 0;
+    gbc_btDelBordo.gridy = 8;
+    m_btDelBordo.addActionListener(e -> btDelBordoClick(e));
+    add(m_btDelBordo, gbc_btDelBordo);
+
     GridBagConstraints gbc_btSalvaBordo = new GridBagConstraints();
     gbc_btSalvaBordo.gridx = 1;
     gbc_btSalvaBordo.gridy = 8;
@@ -174,12 +194,18 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
   protected void ckEndPointClick(ItemEvent p_e) {
     boolean bSel = p_e.getStateChange() == ItemEvent.SELECTED;
+    ModelloDati dati  = getDati();
     System.out.println("PanParmGeneral.ckEndPointClick():" + bSel);
+    dati.setEndVert(m_ver);
   }
 
   protected void ckStartPointClick(ItemEvent p_e) {
     System.out.println("PanParmGeneral.ckStartPointClick()" + p_e.toString());
 
+  }
+
+  protected void btDelVerticeClick(ActionEvent p_e) {
+    System.out.println("PanParmGeneral.btDelVerticeClick()");
   }
 
   protected void btSalvaVerticeClick(ActionEvent p_e) {
@@ -230,6 +256,14 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
   }
 
+  protected void btDelBordoClick(ActionEvent p_e) {
+    System.out.println("PanParmGeneral.btDelBordoClick()");
+  }
+
+  private ModelloDati getDati() {
+    return SwingApp.getInstance().getDati();
+  }
+
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
     Object obj = p_evt.getOldValue();
@@ -272,6 +306,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     m_ckStartPoint.setVisible(b_v);
     m_ckEndPoint.setVisible(b_v);
     m_btSalvaVert.setVisible(b_v);
+    m_btDelVert.setVisible(b_v);
   }
 
   public void enableBordo() {
@@ -285,6 +320,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     m_lblShortNo.setVisible(b_v);
     m_txShortNo.setVisible(b_v);
     m_btSalvaBordo.setVisible(b_v);
+    m_btDelBordo.setVisible(b_v);
   }
 
   private void popolaVertice() {
