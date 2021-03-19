@@ -274,6 +274,7 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
       Vertice v2 = m_dati.findVertice(m_secondoCerchio.getId());
       PlotBordo bo = new PlotBordo(new Bordo(v1, v2, 1));
       m_dati.addPlotBordo(bo);
+      v1.addBordo(bo.getBordo());
       bRepaint = true;
     }
     if (bRepaint)
@@ -311,19 +312,17 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
   public void salvaFile(File p_fi) {
     File retFi = p_fi;
     if (retFi == null)
-      retFi = apriFileChooser("Dammi il nome file JSON da leggere", false);
+      retFi = apriFileChooser("Dammi il nome file JSON su cui salvare", false);
     if (retFi == null)
       return;
-
-    System.out.println("PanelBase.salvaFile():" + retFi.getAbsolutePath());
+    s_log.info("Salva File ({})", retFi.getAbsolutePath());
     m_dati.salvaFile(retFi);
-
   }
 
   private File apriFileChooser(String p_titolo, boolean bRead) {
     File retFi = null;
     JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-    jfc.setDialogTitle("Dammi il nome file JSON da leggere");
+    jfc.setDialogTitle(p_titolo);
     jfc.setMultiSelectionEnabled(false);
     jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -381,7 +380,8 @@ public class PanelBase extends JPanel implements PropertyChangeListener {
     Dimension dim = getSize();
     g2.clearRect(0, 0, dim.width, dim.height);
     PlotGriglia pg = new PlotGriglia();
-    pg.disegnaGriglia(g2, trasp);
+    if (m_dati.isDisegnaGriglia())
+      pg.disegnaGriglia(g2, trasp);
     disegnaBordi(g2);
     disegnaVertici(g2);
     // imposto la pref.size al massimo toccato dai grafi

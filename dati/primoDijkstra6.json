@@ -36,10 +36,10 @@
     {
       "id": "4",
       "punto": {
-        "px": 25.02830188679245,
-        "py": 24.36792452830188,
-        "x": 379,
-        "y": 332
+        "px": 22.7,
+        "py": 25.118867924528296,
+        "x": 227,
+        "y": 224
       },
       "start": false,
       "end": false
@@ -47,10 +47,10 @@
     {
       "id": "5",
       "punto": {
-        "px": 36.98113207547169,
-        "py": 29.122641509433958,
-        "x": 560,
-        "y": 260
+        "px": 34.8,
+        "py": 25.618867924528296,
+        "x": 348,
+        "y": 219
       },
       "start": false,
       "end": false
@@ -213,14 +213,8 @@
     {
       "idVerticeDa": "7",
       "idVerticeA": "9",
-      "peso": 2,
-      "shortNo": 0
-    },
-    {
-      "idVerticeDa": "4",
-      "idVerticeA": "9",
-      "peso": 2,
-      "shortNo": 0
+      "peso": 1,
+      "shortNo": 1
     },
     {
       "idVerticeDa": "8",
@@ -232,13 +226,13 @@
       "idVerticeDa": "10",
       "idVerticeA": "11",
       "peso": 3,
-      "shortNo": 1
+      "shortNo": 0
     },
     {
       "idVerticeDa": "5",
       "idVerticeA": "11",
       "peso": 66,
-      "shortNo": 0
+      "shortNo": 1
     },
     {
       "idVerticeDa": "7",
@@ -250,7 +244,7 @@
       "idVerticeDa": "7",
       "idVerticeA": "dodici",
       "peso": 61,
-      "shortNo": 1
+      "shortNo": 0
     },
     {
       "idVerticeDa": "dodici",
@@ -285,14 +279,14 @@
     {
       "idVerticeDa": "dodici",
       "idVerticeA": "14",
-      "peso": 1,
-      "shortNo": 1
+      "peso": 111,
+      "shortNo": 0
     },
     {
       "idVerticeDa": "14",
       "idVerticeA": "10",
       "peso": 1,
-      "shortNo": 1
+      "shortNo": 0
     },
     {
       "idVerticeDa": "2",
@@ -304,7 +298,26 @@
       "idVerticeDa": "9",
       "idVerticeA": "5",
       "peso": 14,
+      "shortNo": 1
+    },
+    {
+      "idVerticeDa": "6",
+      "idVerticeA": "4",
+      "peso": 1,
+      "shortNo": 0
+    },
+    {
+      "idVerticeDa": "9",
+      "idVerticeA": "4",
+      "peso": 1,
       "shortNo": 0
     }
-  ]
+  ],
+  "m_trasp": {
+    "width": 0.0,
+    "height": 0.0,
+    "zoom": 10.0,
+    "m_maxX": 544.4954128440365,
+    "m_maxY": 475.18867924528297
+  }
 }

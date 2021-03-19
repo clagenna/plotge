@@ -17,16 +17,17 @@ import lombok.Setter;
 
 public class AppProperties {
 
-  private static final Logger        s_log               = LogManager.getLogger(AppProperties.class);
-  private static final String        CSZ_PROP_FILE       = "plotge.properties";
-  public static final String         CSZ_PROP_LASTDIR    = "last.dir";
-  public static final String         CSZ_PROP_LASTFIL    = "last.fil";
-  public static final String         CSZ_PROP_DIMFRAME_X = "frame.dimx";
-  public static final String         CSZ_PROP_DIMFRAME_Y = "frame.dimy";
-  public static final String         CSZ_PROP_POSFRAME_X = "frame.posx";
-  public static final String         CSZ_PROP_POSFRAME_Y = "frame.posy";
-  public static final String         CSZ_PROP_MENUFILE   = "menu.%d";
-  public static final String         CSZ_PROP_BO_TOLLER  = "bordo.tolleranza";
+  private static final Logger        s_log                   = LogManager.getLogger(AppProperties.class);
+  private static final String        CSZ_PROP_FILE           = "plotge.properties";
+  public static final String         CSZ_PROP_LASTDIR        = "last.dir";
+  public static final String         CSZ_PROP_LASTFIL        = "last.fil";
+  public static final String         CSZ_PROP_DIMFRAME_X     = "frame.dimx";
+  public static final String         CSZ_PROP_DIMFRAME_Y     = "frame.dimy";
+  public static final String         CSZ_PROP_POSFRAME_X     = "frame.posx";
+  public static final String         CSZ_PROP_POSFRAME_Y     = "frame.posy";
+  public static final String         CSZ_PROP_MENUFILE       = "menu.%d";
+  public static final String         CSZ_PROP_BO_TOLLER      = "bordo.tolleranza";
+  public static final String         CSZ_PROP_DISEGNAGRIGLIA = "disgna.griglia";
 
   private static AppProperties       s_inst;
 
@@ -127,4 +128,26 @@ public class AppProperties {
     return ii.intValue();
   }
 
+  public boolean getBooleanPropVal(String p_key) {
+    boolean bRet = false;
+    String sz = getPropVal(p_key);
+    if (sz == null)
+      return bRet;
+    sz = sz.toLowerCase();
+    switch (sz) {
+      case "vero":
+      case "true":
+      case "yes":
+      case "y":
+      case "t":
+      case "1":
+        bRet = true;
+        break;
+    }
+    return bRet;
+  }
+
+  public void setBooleanPropVal(String p_key, boolean bVal) {
+    setPropVal(p_key, Boolean.valueOf(bVal).toString());
+  }
 }

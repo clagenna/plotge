@@ -32,7 +32,10 @@ public class MioDijkstra {
   public void analizzaTutti(Vertice p_vePrimo, Vertice p_veUltimo) {
     init();
     if (p_vePrimo == null || p_veUltimo == null) {
-      s_log.error("Mancano i vertici estremi");
+      String szMsg = "Mancano i vertici estremi";
+      s_log.error(szMsg);
+      PropertyChangeBroadcaster bcst = PropertyChangeBroadcaster.getInst();
+      bcst.broadCast(this, EPropChange.notificaStatus, szMsg);
       return;
     }
     nodoInizio = p_vePrimo.getId();

@@ -26,7 +26,9 @@ import sm.clagenna.plotge.dati.Bordo;
 import sm.clagenna.plotge.dati.ModelloDati;
 import sm.clagenna.plotge.dati.Vertice;
 import sm.clagenna.plotge.enumerati.EPropChange;
+import sm.clagenna.plotge.sys.AppProperties;
 import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
+import java.awt.Dimension;
 
 public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
@@ -49,6 +51,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
   private JButton                   m_btDelBordo;
   private JButton                   m_btSalvaBordo;
   private JLabel                    m_lblTitoloParm;
+  private JCheckBox m_chkGriglia;
 
   public PanParmGeneral() {
     initialize();
@@ -58,6 +61,8 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
   }
 
   private void initialize() {
+    setPreferredSize(new Dimension(240, 244));
+    AppProperties prop = AppProperties.getInst();
 
     GridBagLayout gridBagLayout = new GridBagLayout();
     gridBagLayout.columnWidths = new int[] { 0, 0, 0 };
@@ -78,9 +83,10 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
 
     m_txId = new JTextField();
     GridBagConstraints gbc_txId = new GridBagConstraints();
+    gbc_txId.gridwidth = 2;
     gbc_txId.insets = new Insets(0, 0, 5, 0);
     gbc_txId.fill = GridBagConstraints.HORIZONTAL;
-    gbc_txId.gridx = 1;
+    gbc_txId.gridx = 0;
     gbc_txId.gridy = 1;
     add(m_txId, gbc_txId);
     m_txId.setColumns(10);
@@ -92,6 +98,22 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
         ckStartPointClick(p_e);
       }
     });
+    
+    m_chkGriglia = new JCheckBox("Griglia");
+    m_chkGriglia.setToolTipText("disegna la griglia di sottofondo");
+    m_chkGriglia.getModel().setArmed(prop.getBooleanPropVal(AppProperties.CSZ_PROP_DISEGNAGRIGLIA));
+    m_chkGriglia.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent p_e) {
+        ckGrigliaClick(p_e);
+      }
+    });
+    GridBagConstraints gbc_chkGriglia = new GridBagConstraints();
+    gbc_chkGriglia.anchor = GridBagConstraints.WEST;
+    gbc_chkGriglia.insets = new Insets(0, 0, 5, 5);
+    gbc_chkGriglia.gridx = 0;
+    gbc_chkGriglia.gridy = 2;
+    add(m_chkGriglia, gbc_chkGriglia);
     m_ckStartPoint.setHorizontalAlignment(SwingConstants.LEFT);
     GridBagConstraints gbc_ckStartPoint = new GridBagConstraints();
     gbc_ckStartPoint.anchor = GridBagConstraints.WEST;
@@ -212,6 +234,14 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.ridisegna);
   }
 
+  protected void ckGrigliaClick(ItemEvent p_e) {
+    boolean bSel = p_e.getStateChange() == ItemEvent.SELECTED;
+    ModelloDati dati = getDati();
+    System.out.println("PanParmGeneral.ckGrigliaClick():" + bSel);
+    dati.setDisegnaGriglia(bSel);
+    PropertyChangeBroadcaster.getInst().broadCast(this, EPropChange.ridisegna);
+  }
+
   protected void btDelVerticeClick(ActionEvent p_e) {
     System.out.println("PanParmGeneral.btDelVerticeClick()");
     try {
@@ -306,7 +336,7 @@ public class PanParmGeneral extends JPanel implements PropertyChangeListener {
     if ( ! (obj instanceof EPropChange))
       return;
     EPropChange pch = (EPropChange) obj;
-    s_log.debug("Evento {} su {}", pch.toString(), p_evt.getSource().getClass().getSimpleName());
+    // s_log.debug("Evento {} su {}", pch.toString(), p_evt.getSource().getClass().getSimpleName());
 
     switch (pch) {
       case selectVertice:

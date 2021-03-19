@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 import sm.clagenna.plotge.interf.IGestFile;
 import sm.clagenna.plotge.sys.AppProperties;
@@ -21,7 +22,7 @@ public class MenuFiles {
   private List<File>       m_queue;
 
   public MenuFiles() {
-    if (s_inst != null && ! Beans.isDesignTime())
+    if (s_inst != null && !Beans.isDesignTime())
       throw new UnsupportedOperationException("MenuFile è un Singleton !!");
     s_inst = this;
     m_queue = new ArrayList<>();
@@ -86,11 +87,14 @@ public class MenuFiles {
     p_mnFile.removeAll();
     int k = 1;
     for (File fi : m_queue) {
+      char cc = (char) ('0' + k);
       String actCmd = String.valueOf(k);
       String szFi = String.format("%d %s", k++, fi.getName());
       JMenuItem mni = new JMenuItem(szFi);
       // nel act cmd ci metto l'indice nel m_queue
       mni.setActionCommand(actCmd);
+      KeyStroke shK = KeyStroke.getKeyStroke(cc, java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+      mni.setAccelerator(shK);
       mni.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {

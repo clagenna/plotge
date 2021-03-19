@@ -14,7 +14,9 @@ import sm.clagenna.plotge.dati.Punto;
 import sm.clagenna.plotge.dati.TrasponiFinestra;
 
 public class PlotGriglia {
-  private TrasponiFinestra m_trasp;
+  private static final Color CO_RIGA  = Color.LIGHT_GRAY;
+  private static final Color CO_RIGA5 = new Color(192, 64, 192);
+  private TrasponiFinestra   m_trasp;
 
   public PlotGriglia() {
     // m_pan = p_pan;
@@ -23,7 +25,7 @@ public class PlotGriglia {
   public void disegnaGriglia(Graphics2D p_g2, TrasponiFinestra p_tr) {
     Graphics2D g2 = (Graphics2D) p_g2.create();
     m_trasp = p_tr;
-    g2.setColor(Color.LIGHT_GRAY);
+    g2.setColor(CO_RIGA);
     int wi = (int) m_trasp.getWidth();
     int he = (int) m_trasp.getHeight();
 
@@ -33,9 +35,9 @@ public class PlotGriglia {
       Punto pp1 = m_trasp.convertiW(p1);
       Punto pp2 = m_trasp.convertiW(p2);
       boolean rott = ((int) lx % 5 == 0);
-      Color co = Color.LIGHT_GRAY;
+      Color co = CO_RIGA;
       if (rott)
-        co = new Color(192, 64, 192);
+        co = CO_RIGA5;
       disegnaRetta(g2, pp1, pp2, 1, co);
       if (rott) {
         Punto pu = m_trasp.convertiW(new Punto(lx + 0.5, 1.5));

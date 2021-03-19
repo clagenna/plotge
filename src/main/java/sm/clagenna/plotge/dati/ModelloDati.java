@@ -26,6 +26,7 @@ import lombok.Setter;
 import sm.clagenna.plotge.enumerati.EPropChange;
 import sm.clagenna.plotge.swing.PlotBordo;
 import sm.clagenna.plotge.swing.PlotVertice;
+import sm.clagenna.plotge.sys.AppProperties;
 import sm.clagenna.plotge.sys.PropertyChangeBroadcaster;
 
 public class ModelloDati implements Serializable, PropertyChangeListener {
@@ -56,6 +57,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   @Getter
   @Setter transient private double          zoom;
   private TrasponiFinestra                  m_trasp;
+  private boolean                           digegnaGriglia;
 
   public ModelloDati() {
     initialize();
@@ -186,7 +188,10 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
           .create();
 
       jso.toJson(this, fwri);
+      setFileDati(p_fi);
       PropertyChangeBroadcaster.getInst().broadCast(p_fi, EPropChange.scriviFile, p_fi);
+      setModificato(false);
+      MenuFiles.getInst().add(p_fi);
       String sz = String.format("Scritto file \"%s\"", p_fi.getAbsoluteFile());
       ModelloDati.s_log.info(sz);
     } catch (Exception l_e) {
@@ -246,6 +251,15 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
       addPlotBordo(new PlotBordo(b2));
     }
     controllaCiechi();
+  }
+
+  public void setDisegnaGriglia(boolean p_v) {
+    AppProperties.getInst().setBooleanPropVal(AppProperties.CSZ_PROP_DISEGNAGRIGLIA, p_v);
+    digegnaGriglia = p_v;
+  }
+
+  public boolean isDisegnaGriglia() {
+    return digegnaGriglia;
   }
 
   /**

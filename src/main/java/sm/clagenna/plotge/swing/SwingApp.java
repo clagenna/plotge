@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSplitPane;
+import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
@@ -63,6 +64,7 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
   private JMenu                     m_mnUltimiFiles;
   private JPanel                    m_statusBar;
   private JLabel                    m_lbStatus;
+  private JPanel m_panel;
 
   public SwingApp(String p_tit) {
     super(p_tit);
@@ -90,6 +92,9 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
 
     m_panVertici = new PanParmGeneral();
     m_splitParams.setLeftComponent(m_panVertici);
+    
+    m_panel = new JPanel();
+    m_splitParams.setRightComponent(m_panel);
 
     m_panRight = new PanelBase();
     m_panRight.setPreferredSize(new Dimension(400, 300));
@@ -117,6 +122,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
     m_mnuLeggi = new JMenuItem("Leggi", createImageIcon("open.png", "Apri un file di dati"));
     m_mnuLeggi.setMnemonic('L');
     m_mnuLeggi.setMnemonic(KeyEvent.VK_L);
+    KeyStroke shK = KeyStroke.getKeyStroke('L', java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+    m_mnuLeggi.setAccelerator(shK);
     m_mnuLeggi.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -128,6 +135,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
     m_mnuSalva = new JMenuItem("Salva", createImageIcon("save.png", "Salva il file di dati"));
     m_mnuSalva.setMnemonic('s');
     m_mnuSalva.setMnemonic(KeyEvent.VK_S);
+    shK = KeyStroke.getKeyStroke('S', java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+    m_mnuSalva.setAccelerator(shK);
     m_mnuSalva.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -138,6 +147,7 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
 
     m_mnUltimiFiles = new JMenu("Ultimi Files");
     m_menu.add(m_mnUltimiFiles);
+
     m_filesMenu.creaElenco(this, m_mnUltimiFiles);
 
     JSeparator separator = new JSeparator();
@@ -145,6 +155,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
 
     m_mnuEsci = new JMenuItem("Esci", createImageIcon("exit.png", "Esci dal applicazione"));
     m_mnuEsci.setMnemonic('E');
+    shK = KeyStroke.getKeyStroke('E', java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+    m_mnuEsci.setAccelerator(shK);
     m_mnuEsci.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -157,6 +169,8 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
     m_menuBar.add(m_mnuCalcolo);
 
     m_mnuShortestPath = new JMenuItem("Sh.Path", createImageIcon("shpath.png", "Esci dal applicazione"));
+    shK = KeyStroke.getKeyStroke('H', java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
+    m_mnuShortestPath.setAccelerator(shK);
     m_mnuShortestPath.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -266,7 +280,7 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
   public void propertyChange(PropertyChangeEvent p_evt) {
     String szNam = null;
     String szTit = getTitle();
-    System.out.println("SwingApp.propertyChange():" + p_evt.toString());
+    // System.out.println("SwingApp.propertyChange():" + p_evt.toString());
 
     EPropChange pch = (EPropChange) p_evt.getOldValue();
     switch (pch) {
