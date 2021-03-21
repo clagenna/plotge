@@ -21,7 +21,7 @@ import sm.clagenna.plotge.dati.Vertice;
 public class PlotBordo {
 
   private static Color                      s_defaulColor     = Color.pink;
-  private static Color                      s_shortestColor   = Color.red;
+  private static Color                      s_shortestColor   = new Color(128, 128, 32);
   private static Color                      s_labelColor      = new Color(32, 128, 32);
 
   private static int                        s_defaultSpessore = 3;
@@ -30,12 +30,9 @@ public class PlotBordo {
   private PlotVertice                       m_vDa;
   private PlotVertice                       m_vA;
 
-  @Getter
-  @Setter private transient Color           color;
-  @Getter
-  @Setter private int                       spessore;
-  @Getter
-  @Setter private transient boolean         selected;
+  @Getter @Setter private transient Color   color;
+  @Getter @Setter private int               spessore;
+  @Getter @Setter private transient boolean selected;
 
   private Polygon                           m_freccia;
   private EquazLineare                      m_eq;
@@ -73,7 +70,7 @@ public class PlotBordo {
       g2.setColor(Color.red);
     else if (m_bordo.getShortNo() > 0) {
       g2.setColor(PlotBordo.s_shortestColor);
-      stk = new BasicStroke(getSpessore() * 2);
+      stk = new BasicStroke(getSpessore() * 1);
     } else
       g2.setColor(getColor());
     g2.setStroke(stk);
@@ -121,9 +118,10 @@ public class PlotBordo {
     // trasf.setToIdentity();
 
     double angolo = Math.atan2(pDa.y - pA.y, pDa.x - pA.x) + Math.PI;
-    double raggio = m_vDa.getRaggio() * p_trasp.getZoom();
+    // piccoli correttivi per la freccia
+    double raggio = m_vDa.getRaggio()* p_trasp.getZoom() + 3;
     if (m_vA.isStart() || m_vA.isEnd())
-      raggio = m_vA.getRaggio() * 2;
+      raggio += 7;
     double fTraslX = pA.x - Math.cos(angolo) * raggio;
     double fTraslY = pA.y - Math.sin(angolo) * raggio;
 
@@ -143,7 +141,6 @@ public class PlotBordo {
     boolean bRet = false;
     if (m_eq == null)
       return bRet;
-
     bRet = m_eq.inLine(p_pu);
     return bRet;
   }
