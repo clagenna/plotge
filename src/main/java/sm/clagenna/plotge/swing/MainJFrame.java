@@ -81,7 +81,7 @@ public abstract class MainJFrame extends JFrame {
       }
     });
 
-    setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     creaComponents();
     pack();
     setLocationRelativeTo(null);

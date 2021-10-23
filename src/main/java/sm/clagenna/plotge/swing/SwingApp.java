@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -111,6 +113,14 @@ public class SwingApp extends MainJFrame implements PropertyChangeListener, IGes
     m_lbStatus = new JLabel("Last Status");
     m_lbStatus.setHorizontalAlignment(SwingConstants.LEFT);
     m_statusBar.add(m_lbStatus);
+    
+    
+    addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent p_e) {
+        mnuEsciClick();
+      }
+    });
 
     m_menuBar = new JMenuBar();
     setJMenuBar(m_menuBar);
