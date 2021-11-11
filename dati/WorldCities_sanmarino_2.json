@@ -1,0 +1,103 @@
+﻿{
+    "liVertici":  [
+                      {
+                          "id":  "San Marino",
+                          "punto":  {
+                                        "px":  25.9000,
+                                        "py":  30.1000,
+                                        "x":  350,
+                                        "y":  249
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Serravalle",
+                          "punto":  {
+                                        "px":  62.2000,
+                                        "py":  62.8000,
+                                        "x":  0,
+                                        "y":  85
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Borgo Maggiore",
+                          "punto":  {
+                                        "px":  34.7000,
+                                        "py":  29.2000,
+                                        "x":  265,
+                                        "y":  253
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Domagnano",
+                          "punto":  {
+                                        "px":  43.1000,
+                                        "py":  50.3000,
+                                        "x":  184,
+                                        "y":  147
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Acquaviva",
+                          "punto":  {
+                                        "px":  39.2000,
+                                        "py":  0.0000,
+                                        "x":  221,
+                                        "y":  400
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Fiorentino",
+                          "punto":  {
+                                        "px":  3.1000,
+                                        "py":  39.8000,
+                                        "x":  570,
+                                        "y":  200
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Montegiardino",
+                          "punto":  {
+                                        "px":  3.1000,
+                                        "py":  65.0000,
+                                        "x":  570,
+                                        "y":  74
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Chiesanuova",
+                          "punto":  {
+                                        "px":  0.0000,
+                                        "py":  3.1000,
+                                        "x":  600,
+                                        "y":  384
+                                    },
+                          "start":  false,
+                          "end":  false
+                      },
+                      {
+                          "id":  "Faetano",
+                          "punto":  {
+                                        "px":  20.0000,
+                                        "py":  79.8000,
+                                        "x":  407,
+                                        "y":  0
+                                    },
+                          "start":  false,
+                          "end":  false
+                      }
+                  ]
+}

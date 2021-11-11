@@ -1,0 +1,103 @@
+﻿{ "liVertici": 
+[
+    {
+        "id":  "San Marino",
+        "punto":  {
+                      "px":  7.0199999999998255,
+                      "py":  8786.4,
+                      "x":  87,
+                      "y":  141260
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Serravalle",
+        "punto":  {
+                      "px":  13.55999999999986,
+                      "py":  8793.66,
+                      "x":  169,
+                      "y":  141377
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Borgo Maggiore",
+        "punto":  {
+                      "px":  6.83999999999989,
+                      "py":  8788.16,
+                      "x":  85,
+                      "y":  141288
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Domagnano",
+        "punto":  {
+                      "px":  11.060000000000002,
+                      "py":  8789.84,
+                      "x":  138,
+                      "y":  141315
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Acquaviva",
+        "punto":  {
+                      "px":  1,
+                      "py":  8789.0600000000013,
+                      "x":  12,
+                      "y":  141303
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Fiorentino",
+        "punto":  {
+                      "px":  8.9599999999999227,
+                      "py":  8781.84,
+                      "x":  112,
+                      "y":  141187
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Montegiardino",
+        "punto":  {
+                      "px":  13.9999999999999,
+                      "py":  8781.84,
+                      "x":  175,
+                      "y":  141187
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Chiesanuova",
+        "punto":  {
+                      "px":  1.6199999999999761,
+                      "py":  8781.2200000000012,
+                      "x":  20,
+                      "y":  141177
+                  },
+        "start":  false,
+        "end":  false
+    },
+    {
+        "id":  "Faetano",
+        "punto":  {
+                      "px":  16.960000000000107,
+                      "py":  8785.22,
+                      "x":  212,
+                      "y":  141241
+                  },
+        "start":  false,
+        "end":  false
+    }
+]
+}

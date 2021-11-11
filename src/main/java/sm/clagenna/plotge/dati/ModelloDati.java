@@ -36,26 +36,21 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   private static final Logger               s_log            = LogManager.getLogger(ModelloDati.class);
 
   /** viene serializzata con GSon */
-  @Getter
-  @Setter private transient boolean         modificato;
-  @Getter
-  @Setter private transient boolean         serializing;
+  @Getter @Setter private transient boolean modificato;
+  @Getter @Setter private transient boolean serializing;
   private List<Vertice>                     liVertici;
   private transient Map<String, Vertice>    m_mapVerts;
 
-  @Getter
-  @Setter private transient Vertice         startVert;
+  @Getter @Setter private transient Vertice startVert;
   @Getter private transient Vertice         endVert;
 
   /** viene serializzata con GSon */
   private List<Bordo>                       liBordi;
   private transient List<PlotVertice>       m_liPVert;
   private transient List<PlotBordo>         m_liPBord;
-  @Getter
-  @Setter private transient File            fileDati;
+  @Getter @Setter private transient File    fileDati;
 
-  @Getter
-  @Setter transient private double          zoom;
+  @Getter @Setter transient private double  zoom;
   private TrasponiFinestra                  m_trasp;
   private boolean                           digegnaGriglia;
 
@@ -237,18 +232,22 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
         setStartVert(pve.getVertice());
       if (pve.isEnd())
         setEndVert(pve.getVertice());
-      m_mapVerts.put(ve.getId(), ve);
+      if (ve != null)
+        m_mapVerts.put(ve.getId(), ve);
+      else
+        System.out.println("ModelloDati.leggiDa() ve==*NULL*");
     }
-
-    for (Bordo bo : p_data.liBordi) {
-      Vertice vDa = m_mapVerts.get(bo.getIdVerticeDa());
-      Vertice vA = m_mapVerts.get(bo.getIdVerticeA());
-      if (vDa == null || vA == null)
-        System.out.println("ModelloDati.leggiDa() ... manca un vertice !!");
-      Bordo b2 = new Bordo(vDa, vA, bo.getPeso());
-      b2.setShortNo(bo.getShortNo());
-      vDa.addBordo(b2);
-      addPlotBordo(new PlotBordo(b2));
+    if (p_data.liBordi != null) {
+      for (Bordo bo : p_data.liBordi) {
+        Vertice vDa = m_mapVerts.get(bo.getIdVerticeDa());
+        Vertice vA = m_mapVerts.get(bo.getIdVerticeA());
+        if (vDa == null || vA == null)
+          System.out.println("ModelloDati.leggiDa() ... manca un vertice !!");
+        Bordo b2 = new Bordo(vDa, vA, bo.getPeso());
+        b2.setShortNo(bo.getShortNo());
+        vDa.addBordo(b2);
+        addPlotBordo(new PlotBordo(b2));
+      }
     }
     controllaCiechi();
   }
@@ -307,8 +306,7 @@ public class ModelloDati implements Serializable, PropertyChangeListener {
   @Override
   public void propertyChange(PropertyChangeEvent p_evt) {
     Object obj = p_evt.getOldValue();
-    @SuppressWarnings("unused")
-    Object lv = p_evt.getNewValue();
+    @SuppressWarnings("unused") Object lv = p_evt.getNewValue();
     if ( ! (obj instanceof EPropChange))
       return;
     EPropChange pch = (EPropChange) obj;

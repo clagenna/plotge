@@ -19,10 +19,8 @@ public class TrasponiFinestra implements PropertyChangeListener {
 
   public static double           s_zoomDefault = 10F;
 
-  @Getter
-  @Setter private double         width;
-  @Getter
-  @Setter private double         height;
+  @Getter @Setter private double width;
+  @Getter @Setter private double height;
   @Getter private double         zoom;
 
   private double                 m_maxX;
@@ -131,6 +129,7 @@ public class TrasponiFinestra implements PropertyChangeListener {
     double ly = m_maxY - p.getPy() * zoom;
     ret.setWx((int) lx);
     ret.setWy((int) ly);
+    System.out.println("convertiW=" + ret.toString());
     return ret;
   }
 
@@ -151,7 +150,7 @@ public class TrasponiFinestra implements PropertyChangeListener {
   //    height = (rect.height);
   //    inizializza();
   //  }
-  
+
   public void resetGeometry(ModelloDati p_dati) {
     m_dati = p_dati;
     resetGeometry(p_dati.getPlotVertici());

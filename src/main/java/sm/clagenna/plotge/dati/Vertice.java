@@ -11,21 +11,17 @@ public class Vertice implements Comparable<Vertice> {
 
   private static int                                    s_nObj = 0;
 
-  @Getter
-  @Setter private String                                id;
+  @Getter @Setter private String                        id;
 
   private Punto                                         punto;
 
-  @Getter
-  @Setter private boolean                               start;
+  @Getter @Setter private boolean                       start;
 
-  @Getter
-  @Setter private boolean                               end;
+  @Getter @Setter private boolean                       end;
 
   @Setter private transient boolean                     cieco;
 
-  @Getter
-  @Setter private transient Map<Vertice, Bordo>         bordi;
+  @Getter @Setter private transient Map<Vertice, Bordo> bordi;
 
   public Vertice() {
     setId(String.valueOf(++s_nObj));
@@ -72,11 +68,7 @@ public class Vertice implements Comparable<Vertice> {
 
   @Override
   public int compareTo(Vertice p_o) {
-    if (p_o == null)
-      return -1;
-    if (id == null)
-      return -1;
-    if (p_o.id == null)
+    if ((p_o == null) || (id == null) || (p_o.id == null))
       return -1;
     return id.compareTo(p_o.id);
   }

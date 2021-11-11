@@ -1,0 +1,103 @@
+{
+	"liVertici": [
+		{
+			"id": "San Marino",
+			"punto": {
+				"px": 43.932,
+				"py": 12.4484,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Serravalle",
+			"punto": {
+				"px": 43.9683,
+				"py": 12.4811,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Borgo Maggiore",
+			"punto": {
+				"px": 43.9408,
+				"py": 12.4475,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Domagnano",
+			"punto": {
+				"px": 43.9492,
+				"py": 12.4686,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Acquaviva",
+			"punto": {
+				"px": 43.9453,
+				"py": 12.4183,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Fiorentino",
+			"punto": {
+				"px": 43.9092,
+				"py": 12.4581,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Montegiardino",
+			"punto": {
+				"px": 43.9092,
+				"py": 12.4833,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Chiesanuova",
+			"punto": {
+				"px": 43.9061,
+				"py": 12.4214,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		},
+		{
+			"id": "Faetano",
+			"punto": {
+				"px": 43.9261,
+				"py": 12.4981,
+				"x": 0,
+				"y": 0
+			},
+			"start": false,
+			"end": false
+		}
+	]
+}
